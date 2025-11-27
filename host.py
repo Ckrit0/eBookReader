@@ -21,8 +21,9 @@ def main():
   return  data
 
 if __name__ == '__main__':
-  print('외부ip: ',get_external_ip())
+  print('############외부ip:',get_external_ip() + '############')
   app.run(debug=True, host='0.0.0.0', ssl_context='adhoc')
+
 
 
 
