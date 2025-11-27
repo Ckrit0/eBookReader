@@ -16,8 +16,9 @@ app = Flask(__name__)
 @app.route("/")
 def main():
   data=db.getData()
-  print(data)
-  result = "<p>" + data + "</p>"
+  result = ""
+  for row in data
+    result = result + data
   return  result
 
 if __name__ == '__main__':
@@ -26,6 +27,7 @@ if __name__ == '__main__':
     debug=True
     , host='0.0.0.0'
   )
+
 
 
 
