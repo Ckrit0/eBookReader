@@ -38,4 +38,3 @@ def getData():
     con.close()
     return data
 
-print(getData())
