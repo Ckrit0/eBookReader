@@ -22,7 +22,12 @@ def main():
 
 if __name__ == '__main__':
   print('############외부ip:',get_external_ip() + '############')
-  app.run(debug=True, host='0.0.0.0', ssl_context='adhoc')
+  app.run(
+    debug=True
+    , host='0.0.0.0'
+    #, ssl_context='adhoc'
+  )
+
 
 
 
