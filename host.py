@@ -17,7 +17,7 @@ app = Flask(__name__)
 def main():
   data=db.getData()
   result = ""
-  for row in data
+  for row in data:
     result = result + data
   return  result
 
@@ -27,6 +27,7 @@ if __name__ == '__main__':
     debug=True
     , host='0.0.0.0'
   )
+
 
 
 
