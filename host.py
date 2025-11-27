@@ -18,15 +18,15 @@ def main():
   data=db.getData()
   print(data)
   result = "<p>" + data + "</p>"
-  return  data
+  return  result
 
 if __name__ == '__main__':
   print('############외부ip:',get_external_ip() + '############')
   app.run(
     debug=True
     , host='0.0.0.0'
-    #, ssl_context='adhoc'
   )
+
 
 
 
