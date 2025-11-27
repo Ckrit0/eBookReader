@@ -1,5 +1,15 @@
 from flask import Flask
 import sqlCRUD as db
+import requests
+
+def get_external_ip():
+  try:
+    response = request.get('https://api.ipify.org')
+    external_ip = response.text
+    return external_ip
+  except Exception as e:
+    print('Error: ',e)
+    return 'ip_check_error'
 
 app = Flask(__name__)
 
@@ -10,5 +20,7 @@ def main():
   return  data
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", ssl_context='adhoc')
+  print('외부ip: ',get_external_ip())
+  app.run(host='0.0.0.0', ssl_context='adhoc')
+
 
