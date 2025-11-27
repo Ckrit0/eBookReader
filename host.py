@@ -19,7 +19,7 @@ def main():
   result = ""
   for row in data:
     for value in row:
-      result = result + value
+      result = result + str(value)
   return  result
 
 if __name__ == '__main__':
@@ -28,6 +28,7 @@ if __name__ == '__main__':
     debug=True
     , host='0.0.0.0'
   )
+
 
 
 
