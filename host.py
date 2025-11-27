@@ -4,7 +4,7 @@ import requests
 
 def get_external_ip():
   try:
-    response = request.get('https://api.ipify.org')
+    response = requests.get('https://api.ipify.org')
     external_ip = response.text
     return external_ip
   except Exception as e:
@@ -22,5 +22,6 @@ def main():
 if __name__ == '__main__':
   print('외부ip: ',get_external_ip())
   app.run(host='0.0.0.0', ssl_context='adhoc')
+
 
 
