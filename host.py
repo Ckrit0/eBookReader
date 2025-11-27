@@ -18,7 +18,8 @@ def main():
   data=db.getData()
   result = ""
   for row in data:
-    result = result + data
+    for value in row:
+      result = result + value
   return  result
 
 if __name__ == '__main__':
@@ -27,6 +28,7 @@ if __name__ == '__main__':
     debug=True
     , host='0.0.0.0'
   )
+
 
 
 
