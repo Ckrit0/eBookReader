@@ -3,7 +3,7 @@
 {% block content %}
     <ul>
         {% for volume in volumes %}
-            <a href="{{volume}}"><li>{{volume}}</li></a>
+            <a href="{{bookInfo['bookName']}}/{{volume}}"><li>{{volume}}</li></a>
         {% endfor %}
     </ul>
 {% endblock %}
