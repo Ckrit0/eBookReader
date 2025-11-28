@@ -17,19 +17,28 @@ bookInfo = {
   'value' : 0,
   'line' : 0
 }
+bookList = ['test1','test2','test3'] # 임시값. 서버에서 받아와야함.
 
 app = Flask(__name__)
 
 @app.route("/")
 def main():
-  data=db.getData()
-  return  render_template('index.html',data=data)
+  return  render_template('index.html', bookList=bookList)
 
 @app.route("/<bookName>")
 def selectVolume(bookName):
   bookInfo['name'] = bookName
-  volumes = [1,2,3,4,5] # 이거 나중엔 서버에서 받아와야 함
-  return render_template('selectVolume.html', bookInfo=bookInfo, volumes=volumes)
+  volumes = [1,2,3,4,5] # 임시값. 서버에서 받아와야 함
+  return render_template('selectVolume.html', bookList=bookList, bookInfo=bookInfo, volumes=volumes)
+
+@app.route("/<bookName>/<volume>")
+def viewContents(bookName, volume):
+  data=db.getData()
+  bookInfo['name'] = bookName
+  bookInfo['volume'] = int(volume)
+  contents = ['line1','line2','line3'] # 임시값. 서버에서 받아와야 함
+  return render_template('contents.html', bookList=bookList, bookInfo=bookInfo, contents = contents)
+  
 
 if __name__ == '__main__':
   print('############외부ip:',get_external_ip() + '############') # 나중에 지울 예정
