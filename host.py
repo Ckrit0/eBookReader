@@ -45,7 +45,7 @@ def viewContents(bookName, volume):
 def password():
     global isAdmin
     if isAdmin:
-      admin()
+      return render_template('admin.html', bookList=bookList)
     else:
       return render_template('password.html')
 
@@ -58,7 +58,7 @@ def admin():
       isAdmin = True
       return render_template('admin.html', bookList=bookList)
     else:
-      password()
+      return render_template('password.html')
       
   
 
@@ -68,4 +68,3 @@ if __name__ == '__main__':
     debug=True
     , host='0.0.0.0'
   )
-
