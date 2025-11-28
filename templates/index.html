@@ -11,18 +11,18 @@
     {% endif %}
 </head>
 <body>
-    <header>
+    <header id="header">
         <a href="/"><h2>eBookReader</h2></a>
     </header>
-    <sidebar>
+    <sidebar id="sidebar">
         <ul>
             {% for book in bookList %}
                 <a href="/{{book}}"><li>{{book}}</li></a>
             {% endfor %}
         </ul>
     </sidebar>
-    <content>
+    <contents id="contents">
         {% block content %} {% endblock %}
-    </content>
+    </contents>
 </body>
 </html>
