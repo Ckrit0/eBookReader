@@ -15,7 +15,11 @@
         <a href="/"><h2>eBookReader</h2></a>
     </header>
     <sidebar>
-
+        <ul>
+            {% for book in bookList %}
+                <a href="{{book}}"><li>{{book}}</li></a>
+            {% endfor %}
+        </ul>
     </sidebar>
     <content>
         {% block content %} {% endblock %}
