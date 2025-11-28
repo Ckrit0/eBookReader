@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% if bookInfo %}
+        <title>eBookReader(adm) - {{bookInfo['name']}} ({{bookInfo['value']}})</title>
+    {% else %}
+        <title>eBookReader(adm)</title>
+    {% endif %}
+</head>
+<body>
+    <header>
+        <a href="/"><h2>eBookReader</h2></a>
+    </header>
+    <sidebar>
+        <ul>
+            {% for book in bookList %}
+                <a href="/{{book}}"><li>{{book}}</li></a>
+            {% endfor %}
+        </ul>
+    </sidebar>
+    <content>
+        {% block content %} {% endblock %}
+    </content>
+</body>
+</html>
