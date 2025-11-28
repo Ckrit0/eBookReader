@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block content %}
-    {% for row in data %}
-        <p>bid:{{row[0]}}, volume:{{row[1]}}, line:{{row[2]}}, contents:{{row[3]}}</p>
+    {% for content in contents %}
+        <p>{{content}}</p>
     {% endfor %}
 {% endblock %}
