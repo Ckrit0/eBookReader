@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import sqlCRUD as db
 import requests
 
@@ -18,6 +18,8 @@ bookInfo = {
   'line' : 0
 }
 bookList = ['test1','test2','test3'] # 임시값. 서버에서 받아와야함.
+adminPw = "test"
+isAdmin = False
 
 app = Flask(__name__)
 
@@ -38,6 +40,24 @@ def viewContents(bookName, volume):
   bookInfo['volume'] = int(volume)
   contents = ['line1','line2','line3'] # 임시값. 서버에서 받아와야 함
   return render_template('contents.html', bookList=bookList, bookInfo=bookInfo, contents = contents)
+
+@app.route("/admin",methods=["GET"])
+def password():
+    if isAdmin:
+      admin()
+    else:
+      return render_template('password.html')
+
+@app.route("/admin",methods=["POST"])
+def admin():
+    if isAdmin:
+      return render_template('admin.html', bookList=bookList)
+    elif request.form['password'] == adminPw:
+      isAdmin = True
+      return render_template('admin.html', bookList=bookList)
+    else:
+      password()
+      
   
 
 if __name__ == '__main__':
