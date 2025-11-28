@@ -43,6 +43,7 @@ def viewContents(bookName, volume):
 
 @app.route("/admin",methods=["GET"])
 def password():
+    global isAdmin
     if isAdmin:
       admin()
     else:
@@ -50,6 +51,7 @@ def password():
 
 @app.route("/admin",methods=["POST"])
 def admin():
+    global isAdmin
     if isAdmin:
       return render_template('admin.html', bookList=bookList)
     elif request.form['password'] == adminPw:
@@ -66,3 +68,4 @@ if __name__ == '__main__':
     debug=True
     , host='0.0.0.0'
   )
+
