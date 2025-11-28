@@ -1,15 +1,17 @@
 
 body{
     display: grid;
-    grid-template-columns: 1fr 3fr;
-    grid-template-rows: 1fr 9fr;
+    grid-template-columns: 1fr 6fr;
     row-gap: 5px;
     column-gap: 5px;
 }
 
 #header{
     grid-row: 1;
-    grid-column: 1/2;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    text-align: center;
+    height: 10vh;
     /* 영역구분용 색상 */
     background-color: lightgray;
 }
@@ -17,6 +19,7 @@ body{
 #sidebar{
     grid-row: 2;
     grid-column: 1;
+    height: 85vh;
     /* 영역구분용 색상 */
     background-color: lightblue;
 }
@@ -24,6 +27,8 @@ body{
 #contents{
     grid-row: 2;
     grid-column: 2;
+    padding: 10px;
+    height: 85vh;
     /* 영역구분용 색상 */
     background-color: lightsalmon;
 }
