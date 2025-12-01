@@ -13,16 +13,27 @@
 <body>
     <header id="header">
         <a href="/"><h2>eBookReader</h2></a>
+        {% if bookInfo %}
+            <p>
+                <span class="headName">{{bookInfo['name']}} </span>
+                / <input class="headInput" name="headValue" type="text" value="{{bookInfo['value']}}" />권(화)
+                / <input class="headInput" name="headLine" type="text" value="{{bookInfo['line']}}" />줄
+                <button id="headButton">이동</button>
+            </p>
+        {% endif %}
     </header>
     <sidebar id="sidebar">
         <ul>
-            {% for book in bookList %}
-                <a href="/{{book}}"><li>{{book}}</li></a>
+            {% for bookName in bookList %}
+                <a href="/{{bookName}}"><li>{{bookName}}</li></a>
             {% endfor %}
         </ul>
     </sidebar>
     <contents id="contents">
         {% block content %} {% endblock %}
     </contents>
+    <footer id="footer">
+        footer
+    </footer>
 </body>
 </html>
