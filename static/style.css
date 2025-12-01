@@ -4,6 +4,11 @@ body{
     grid-template-columns: 1fr 6fr;
     row-gap: 5px;
     column-gap: 5px;
+    gap: 0px;
+}
+
+ul{
+    list-style: none;
 }
 
 #header{
@@ -12,23 +17,43 @@ body{
     grid-column-end: 3;
     text-align: center;
     height: 10vh;
-    /* 영역구분용 색상 */
-    background-color: lightgray;
+    padding-bottom: 20px;
+    border-bottom: 2px solid black;
 }
 
 #sidebar{
     grid-row: 2;
     grid-column: 1;
-    height: 85vh;
-    /* 영역구분용 색상 */
-    background-color: lightblue;
+    padding: 10px;
+    min-height: 80vh;
+    max-height: 80vh;
+    border-right: 2px solid black;
+    overflow: auto;
+    text-align: left;
 }
 
 #contents{
     grid-row: 2;
     grid-column: 2;
     padding: 10px;
-    height: 85vh;
-    /* 영역구분용 색상 */
-    background-color: lightsalmon;
+    min-height: 80vh;
+    max-height: 80vh;
+    overflow: auto;
+}
+
+#footer{
+    grid-row: 3;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    text-align: center;
+    border-top: 2px solid black;
+}
+
+#headName{
+
+}
+
+.headInput{
+    width: 30px;
+    text-align: right;
 }
