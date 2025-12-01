@@ -17,7 +17,7 @@ bookInfo = {
   'value' : 0,
   'line' : 0
 }
-bookList = ['test1','test2','test3'] # 임시값. 서버에서 받아와야함.
+bookList = ['t1','te2','tes3','test4','testt5','testte6','testtes7','testtest8'] # 임시값. 서버에서 받아와야함.
 adminPw = "test"
 isAdmin = False
 
@@ -35,10 +35,10 @@ def selectVolume(bookName):
 
 @app.route("/<bookName>/<volume>")
 def viewContents(bookName, volume):
-  data=db.getData()
+  #data=db.getData()
   bookInfo['name'] = bookName
   bookInfo['volume'] = int(volume)
-  contents = ['line1','line2','line3'] # 임시값. 서버에서 받아와야 함
+  contents = ['line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line'] # 임시값. 서버에서 받아와야 함
   return render_template('contents.html', bookList=bookList, bookInfo=bookInfo, contents = contents)
 
 @app.route("/admin",methods=["GET"])
