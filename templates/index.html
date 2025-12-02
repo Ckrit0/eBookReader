@@ -35,8 +35,8 @@
     <footer id="footer">
         CkriT (ckrit3@gmail.com)
     </footer>
+{% if bookInfo %}
     <script>
-        {% if bookInfo %}
         // 선택한 책 표시
         let bookList = document.getElementsByClassName('bookList')
         for(index in bookList){
@@ -45,10 +45,7 @@
                 bookList[index].style['font-weight']='bold'
             }
         }
-        {% endif %}
-
-        
-
     </script>
+{% endif %}
 </body>
 </html>
