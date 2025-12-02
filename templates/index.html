@@ -12,12 +12,12 @@
 </head>
 <body>
     <header id="header">
-        <a href="/"><h2>eBookReader</h2></a>
+        <a href="/"><h2 id="headTitle">eBookReader</h2></a>
         {% if bookInfo %}
             <p>
-                <span class="headName">{{bookInfo['name']}} </span>
-                / <input class="headInput" name="headValue" type="text" value="{{bookInfo['value']}}" />권(화)
-                / <input class="headInput" name="headLine" type="text" value="{{bookInfo['line']}}" />줄
+                <span id="headName">{{bookInfo['name']}} </span>
+                / <input class="headInput" name="headValue" type="text" value="{{bookInfo['volume']}}" />권(화)
+                / <input id="headLine" class="headInput" name="headLine" type="text" value="{{bookInfo['line']}}" />줄
                 <button id="headButton">이동</button>
             </p>
         {% endif %}
@@ -25,7 +25,7 @@
     <sidebar id="sidebar">
         <ul>
             {% for bookName in bookList %}
-                <a href="/{{bookName}}"><li>{{bookName}}</li></a>
+                <a href="/{{bookName}}"><li class="bookList">{{bookName}}</li></a>
             {% endfor %}
         </ul>
     </sidebar>
@@ -33,7 +33,20 @@
         {% block content %} {% endblock %}
     </contents>
     <footer id="footer">
-        footer
+        CkriT (ckrit3@gmail.com)
     </footer>
+    <script>
+        // 선택한 책 표시
+        let bookList = document.getElementsByClassName('bookList')
+        for(index in bookList){
+            if(bookList[index].innerText == '{{bookInfo['name']}}'){
+                bookList[index].style['color']='black'
+                bookList[index].style['font-weight']='bold'
+            }
+        }
+
+        
+
+    </script>
 </body>
 </html>
