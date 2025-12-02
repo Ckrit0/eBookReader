@@ -1,15 +1,26 @@
 
+/* 태그별 스타일 */
+
 body{
     display: grid;
     grid-template-columns: 1fr 6fr;
     row-gap: 5px;
     column-gap: 5px;
     gap: 0px;
+    color: gray;
+    background-color: rgb(250, 250, 250);
 }
 
 ul{
     list-style: none;
 }
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 전체 구성에 관한 스타일 */
 
 #header{
     grid-row: 1;
@@ -18,7 +29,7 @@ ul{
     text-align: center;
     height: 10vh;
     padding-bottom: 20px;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid gray;
 }
 
 #sidebar{
@@ -27,7 +38,7 @@ ul{
     padding: 10px;
     min-height: 80vh;
     max-height: 80vh;
-    border-right: 2px solid black;
+    border-right: 2px solid gray;
     overflow: auto;
     text-align: left;
 }
@@ -36,9 +47,6 @@ ul{
     grid-row: 2;
     grid-column: 2;
     padding: 10px;
-    min-height: 80vh;
-    max-height: 80vh;
-    overflow: auto;
 }
 
 #footer{
@@ -49,11 +57,104 @@ ul{
     border-top: 2px solid black;
 }
 
-#headName{
+/* 헤더 관련 스타일 */
 
+#headButton{
+    color: gray;
+    margin-left: 10px;
+}
+
+#headButton:hover{
+    color: black;
+    font-weight: bold;
+}
+
+#headTitle:hover{
+    color: blue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#headName{
+    font-weight: bold;
 }
 
 .headInput{
     width: 30px;
     text-align: right;
+    color: gray;
+}
+
+.headInput:focus{
+    color: black;
+}
+
+/* 사이드바 관련 스타일 */
+
+.bookList{
+    
+}
+
+.bookList:hover{
+    color: blue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 볼륨 선택 관련 스타일 */
+
+.volume{
+    
+}
+
+.volume:hover{
+    color: blue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 컨텐츠 관련 스타일 */
+
+#contentContainer{
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
+}
+
+#contentPrev{
+    grid-row: 1;
+    grid-column: 1;
+    text-align: center;
+    margin-top: 40vh;
+    font-size: 60px;
+    
+}
+
+#contentPrev:hover{
+    color: blue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#contentNext{
+    grid-row: 1;
+    grid-column: 3;
+    text-align: center;
+    margin-top: 40vh;
+    font-size: 60px;
+    
+}
+#contentNext:hover{
+    color: blue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#contentLine{
+    grid-row: 1;
+    grid-column: 2;
+    min-height: 80vh;
+    max-height: 80vh;
+    overflow: auto;
+    padding: 0 10px;
+    color: black;
 }
