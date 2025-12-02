@@ -1,7 +1,54 @@
 {% extends 'index.html' %}
 
 {% block content %}
-    {% for content in contents %}
-        <p>{{content}}</p>
-    {% endfor %}
+    <div id="contentContainer">
+        {% if bookInfo['volume'] <= 1 %}
+            <div id="contentPrev"><span onclick="noExistPage(0)">《</span></div>
+        {% else %}
+            <div id="contentPrev"><a href="/{{bookInfo['name']}}/{{bookInfo['volume']-1}}">《</a></div>
+        {% endif %}
+        <div id="contentLine">
+            {% for content in contents %}
+                <p id="c_{{loop.index}}">{{content}}</p>
+            {% endfor %}
+        </div>
+        {% if bookInfo['volume'] >= bookInfo['lastVolume'] %}
+            <div id="contentNext"><span onclick="noExistPage(1)">》</span></div>
+        {% else %}
+            <div id="contentNext"><a href="/{{bookInfo['name']}}/{{bookInfo['volume']+1}}">》</a></div>
+        {% endif %}
+        
+        <script>
+            // 경고창
+            function noExistPage(preOrNext){
+                if(preOrNext == 0){
+                    alert("첫 페이지입니다.")
+                }else{
+                    alert("마지막 페이지입니다.")
+                }
+            }
+            // 현재 스크롤라인 구하기
+            let cl = document.getElementById('contentLine')
+            function findLine(){
+                let clRect = cl.getBoundingClientRect()
+                let coordX = ( clRect.left + clRect.right ) / 2
+                let coordY = clRect.top
+                let nowPages = []
+                for(var i=10; i<30; i+=10){
+                    nowPages.push(document.elementFromPoint(coordX, coordY + i).id.replace('c_',''))
+
+                }
+                for(var i=0; i<3; i++){
+                    if(!isNaN(nowPages[i])){
+                        document.getElementById('headLine').value = nowPages[i]
+                        break
+                    }
+                }
+            }
+            findLine() // 페이지 진입시 1회 실행
+            cl.addEventListener('scroll',findLine)
+
+            
+        </script>
+    </div>
 {% endblock %}
