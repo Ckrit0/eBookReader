@@ -1,1 +1,2 @@
-python host.py
+cd /home/ckrit/workspace/eBookReader/
+nohup python host.py &

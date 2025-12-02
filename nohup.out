@@ -1,0 +1,84 @@
+############외부ip: 118.218.103.120############
+ * Serving Flask app 'host'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.25.15:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 645-308-998
+121.152.40.209 - - [01/Dec/2025 12:26:09] code 400, message Bad request version ('°yÅ\x88\x8b¦$5S\x10È\x12G$´D\x02ªëF¡')
+121.152.40.209 - - [01/Dec/2025 12:26:09] "[35m[1m\x16\x03\x01\x06à\x01\x00\x06Ü\x03\x03¼ÙiÝ\x83h\x89DMXÿ\x93\x8dÒ¤\x8fÐµ£(ÏA¡/g\x06\x10E\x064kà ÕË{t\x9dâQ2\x977\x12ïÑoF¿3¸_oZ6-êô¡?\x97Èºnê\x00 \x9a\x9a\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06s::\x00\x00\x00#\x00\x00DÍ\x00\x05\x00\x03\x02h2þ\x0d\x00ú\x00\x00\x01\x00\x01\x1b\x00 \x8b?K\x99\x8d\x92\x8dlñ#l¨²\x03v \x0f6\\)\x15¼"â}¿è\x00.\x15\x1b\x00\x00ÐhÕ\x8eCq2\x8b©\x8cmÔ¾<ëäÉÆ°\x13\x1b\x8c±^Ø-\x12\x12\x8aq\x9e\x835ØÂ\x8cCuO_\x10¥\x15\x10Ù2°¡·ï\x19`_\x96ô\x8e\x81®½\x13\x13â\x80\x9e¯-p'ã\x91 S\x9brØx®÷\x96J\x04\x02¬öG%%à\x1bÎ\x92\x960Þ{#\x92÷~e\x09\x9d\x88D¾sõH×a5\x83\x91\x92ãô)êì-\x86û\x0eÒ\x14rm.ã^\x93¹$ã0\x90\x8f\x18bª$è\x95ôV}Ö[\\/fTå8"8\x87Î\x93Nd\x18\x96[¾d\x07Þh\x94ÔÌà\x9epÀP¬ù\x99\x04\x87;v\x8c.\x06a\x96U¬\x18³÷\x13ÍªkýT\x09ÂÍi4Ç½\x0fN\x00\x1b\x00\x03\x02\x00\x02\x00\x10\x00\x0e\x00\x0c\x02h2\x08http/1.1\x00\x12\x00\x00\x003\x04ï\x04íJJ\x00\x01\x00\x11ì\x04ÀfÊÍ\x15\x84Ì\x15Ì~LC\x9epðpc\x1c£j\x8b®Ü`\x06\x9cã\x14Ü¶\x86\x8c2\x7f\x0e\x02\x1c\x9a\x96¨¸\x81·vB\x841¤\x16mÅ\x92l\x1b¨ú\x85\\âQf\x06ã§jg»qQ¯çìEªÉÂ<û\x03é4\x0cvê\x88¢\x92°M\x98±2\x05\x93übRÁÛÅIÜlÇt\x07\x1bäA xj%*­p§rH°­&Öª@µm§á\x86¸\x8a]\x7f\x94¸8V!A\\\x0c\x16\x9b´\x01³\x90DÂ\x12=é2ªÈ\x1e\x88¹~\x9bXª\x8bã½ØØv8b\x8aÒÕ\\ h¢\x95;\x83>ñ\x86\x99¥\x7f\x929;Æ\x9a¹Õ4,!\x92³°k(H¢­<¨wî\x17EÞS\x1d\x85`¸\x1a\x9bTñ\x8a¨r"qf\x87L×»\x1f\x06\x86a"ñv*@Ê\x9eé§üIÎJÃa\x08E\x97\x1a¦¬rbh\x87Õ\x16\x07W/hù%ëR\x05\x179¨È\x13¾Å\x85\x8f\x9c;\x14ð \x0d4Z\x8dK´¬ü\\¸\x9f¢,\x09\x19\x1bÎÃAÊk\x13%Ó}\x1aÕ¿w;\x83\x06h\x82\x8fìSêÁB3±6M\x01h+Ñ\x8f\x8cG\x8a£ \x0feè\x85°yÅ\x88\x8b¦$5S\x10È\x12G$´D\x02ªëF¡[0m" HTTPStatus.BAD_REQUEST -
+121.152.40.209 - - [01/Dec/2025 12:26:09] code 400, message Bad request version ('ÝÁ\x87;¬>×&d&ë¶\x8f\x99CÜð5\x11%/{ÊowÛ\x97¬50§{°\x84´H°dGËP')
+121.152.40.209 - - [01/Dec/2025 12:26:09] "[35m[1m\x16\x03\x01\x06 \x01\x00\x06\x9c\x03\x03^\x0eMùÈÂ\x0dXXa\x0c0\x97à°B Ø\x1f\x88\x1ay"¤8T½K¹ß=e \x95\x84\x93&´£¡\x04\x8aÍa³ã\x0c&g\x88\x06\x0enO\x94\x89ã/®DÚÝá\x1dø\x00 ZZ\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x063êê\x00\x00\x00-\x00\x02\x01\x01\x00+\x00\x07\x06jj\x03\x04\x03\x03\x00#\x00\x00\x00\x12\x00\x00ÿ\x01\x00\x01\x00\x00\x0b\x00\x02\x01\x00\x003\x04ï\x04íúú\x00\x01\x00\x11ì\x04À$âF¯\x8a«©ä\x98j\x99]åè\x1eÝÁ\x87;¬>×&d&ë¶\x8f\x99CÜð5\x11%/{ÊowÛ\x97¬50§{°\x84´H°dGËP\x1e[0m" HTTPStatus.BAD_REQUEST -
+121.152.40.209 - - [01/Dec/2025 12:26:10] "GET / HTTP/1.1" 200 -
+121.152.40.209 - - [01/Dec/2025 12:26:10] "GET /static/style.css HTTP/1.1" 200 -
+121.152.40.209 - - [01/Dec/2025 12:26:13] "GET /te2 HTTP/1.1" 200 -
+121.152.40.209 - - [01/Dec/2025 12:26:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+121.152.40.209 - - [01/Dec/2025 12:26:14] "GET /te2/3 HTTP/1.1" 200 -
+121.152.40.209 - - [01/Dec/2025 12:26:14] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+170.64.231.208 - - [01/Dec/2025 13:06:52] code 400, message Bad request version ('À\x14À')
+170.64.231.208 - - [01/Dec/2025 13:06:52] "[35m[1m\x16\x03\x01\x00{\x01\x00\x00w\x03\x03\x93\x04Â _@hj¸\x036Û­\x8eo¢\x1e*\x97õZ=N\x81ò~Ön\x036S\x97\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+170.64.231.208 - - [01/Dec/2025 13:06:52] code 400, message Bad request version ('À\x14À')
+170.64.231.208 - - [01/Dec/2025 13:06:52] "[35m[1m\x16\x03\x01\x00{\x01\x00\x00w\x03\x03\x9c\x15avÞ¥\x1e\x07¸a\x7fÓ\x80ÉH%Nc'¨$l\\cÂno\x8dZãûÈ\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\x09À\x14À[0m" HTTPStatus.BAD_REQUEST -
+170.64.231.208 - - [01/Dec/2025 13:06:53] "GET / HTTP/1.1" 200 -
+80.94.95.83 - - [01/Dec/2025 19:43:03] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+80.94.95.83 - - [01/Dec/2025 19:43:03] "[35m[1m\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie: mstshash=Administr[0m" HTTPStatus.BAD_REQUEST -
+192.168.25.14 - - [01/Dec/2025 22:08:33] "GET / HTTP/1.1" 200 -
+192.168.25.14 - - [01/Dec/2025 22:08:33] "GET /static/style.css HTTP/1.1" 200 -
+192.168.25.14 - - [01/Dec/2025 22:08:33] "GET /favicon.ico HTTP/1.1" 200 -
+192.168.25.14 - - [01/Dec/2025 22:08:54] "GET /t1 HTTP/1.1" 200 -
+192.168.25.14 - - [01/Dec/2025 22:08:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+192.168.25.14 - - [01/Dec/2025 22:08:54] "GET /favicon.ico HTTP/1.1" 200 -
+192.168.25.14 - - [01/Dec/2025 22:08:56] "GET /t1/2 HTTP/1.1" 200 -
+192.168.25.14 - - [01/Dec/2025 22:08:56] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+192.168.25.14 - - [01/Dec/2025 22:08:56] "GET /favicon.ico HTTP/1.1" 200 -
+192.168.25.14 - - [02/Dec/2025 00:19:30] "GET /favicon.ico HTTP/1.1" 200 -
+82.141.160.214 - - [02/Dec/2025 01:34:46] "GET / HTTP/1.0" 200 -
+203.55.131.5 - - [02/Dec/2025 07:46:21] code 400, message Bad request version ('zz\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x00\x7f\x00\x05\x00\x05\x01\x00\x00\x00\x00\x00')
+203.55.131.5 - - [02/Dec/2025 07:46:21] "[35m[1m\x16\x03\x01\x00ì\x01\x00\x00è\x03\x03\x9bhäã¸\x06ëðØ«\x07o\x99úgíòq(Ùw¡ET½WJI\x85~A\x99 u§2MPî\x01÷ááGiY=ê®¤*íw\x84ñSmë¤¡ä\x9f0\x8f^\x00 zz\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x00\x7f\x00\x05\x00\x05\x01\x00\x00\x00\x00\x00[0m" HTTPStatus.BAD_REQUEST -
+203.55.131.5 - - [02/Dec/2025 08:02:09] "GET / HTTP/1.1" 200 -
+203.55.131.5 - - [02/Dec/2025 08:02:42] "GET /favicon.ico HTTP/1.1" 200 -
+ * Detected change in '/home/ckrit/workspace/eBookReader/host.py', reloading
+############외부ip: 118.218.103.120############
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 645-308-998
+############외부ip: 118.218.103.120############
+ * Serving Flask app 'host'
+ * Debug mode: on
+Address already in use
+Port 5000 is in use by another program. Either identify and stop that program, or start the server with a different port.
+############외부ip: 118.218.103.120############
+ * Serving Flask app 'host'
+ * Debug mode: on
+Address already in use
+Port 5000 is in use by another program. Either identify and stop that program, or start the server with a different port.
+############외부ip: 118.218.103.120############
+ * Serving Flask app 'host'
+ * Debug mode: on
+Address already in use
+Port 5000 is in use by another program. Either identify and stop that program, or start the server with a different port.
+############외부ip: 118.218.103.120############
+############외부ip: 118.218.103.120############
+ * Serving Flask app 'host'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.25.15:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 125-898-664
+192.168.25.22 - - [02/Dec/2025 20:07:18] "GET / HTTP/1.1" 200 -
+192.168.25.22 - - [02/Dec/2025 20:07:18] "GET /static/style.css HTTP/1.1" 200 -
+192.168.25.22 - - [02/Dec/2025 20:07:18] "GET /favicon.ico HTTP/1.1" 200 -
+192.168.25.22 - - [02/Dec/2025 20:07:20] "GET /t1 HTTP/1.1" 200 -
+192.168.25.22 - - [02/Dec/2025 20:07:20] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+192.168.25.22 - - [02/Dec/2025 20:07:20] "GET /favicon.ico HTTP/1.1" 200 -
+192.168.25.22 - - [02/Dec/2025 20:07:20] "GET /te2 HTTP/1.1" 200 -
+192.168.25.22 - - [02/Dec/2025 20:07:20] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+192.168.25.22 - - [02/Dec/2025 20:07:20] "GET /favicon.ico HTTP/1.1" 200 -
