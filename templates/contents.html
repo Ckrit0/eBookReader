@@ -47,8 +47,15 @@
                 }
             }
             findLine() // 페이지 진입시 1회 실행
+            
             // 스크롤 이벤트리스너 등록
             cl.addEventListener('scroll',findLine)
+            document.addEventListener('keydown',(e)=>{
+                if(e.key == ' '){
+                    clSize = cl.getBoundingClientRect()
+                    cl.scrollBy({top:(clSize.bottom-clSize.top)*9/10,behavior:'smooth'})
+                }
+            })
 
             // 원하는 라인으로 이동
             function moveLine(toLineNumber){
@@ -77,7 +84,7 @@
                 
                 let lines = getLines()
                 let moveScrollCoord = getScrollCoord(lines,toLineNumber)
-                cl.scrollTo(0,moveScrollCoord)
+                cl.scrollTo({top:moveScrollCoord,behavior:"smooth"})
             }
 
             // 라인 초기 이동
