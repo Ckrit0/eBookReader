@@ -48,18 +48,27 @@
         
         // 버튼으로 이동하기
         function movePage(){
-            let volumeInput = document.getElementById('headVolume')
-            let lineInput = document.getElementById('headLine')
             if(volumeInput.value == {{bookInfo['volume']}}){
                 moveLine(lineInput.value)
             }else{
                 window.location.href = '/' + "{{bookInfo['name']}}" + '/' + volumeInput.value + '/' + lineInput.value
             }
-            
-
         }
+        let volumeInput = document.getElementById('headVolume')
+        let lineInput = document.getElementById('headLine')
         let moveBtn = document.getElementById('headButton')
+        volumeInput.addEventListener('keydown',(e)=>{
+            if(e.key == 'Enter'){
+                movePage()
+            }
+        })
+        lineInput.addEventListener('keydown',(e)=>{
+            if(e.key == 'Enter'){
+                movePage()
+            }
+        })
         moveBtn.addEventListener('click',movePage)
+
         
     </script>
 {% endif %}
