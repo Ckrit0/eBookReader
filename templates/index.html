@@ -16,7 +16,7 @@
         {% if bookInfo %}
             <p>
                 <span id="headName">{{bookInfo['name']}} </span>
-                / <input class="headInput" name="headValue" type="text" value="{{bookInfo['volume']}}" />권(화)
+                / <input id="headVolume" class="headInput" name="headValue" type="text" value="{{bookInfo['volume']}}" />권(화)
                 / <input id="headLine" class="headInput" name="headLine" type="text" value="{{bookInfo['line']}}" />줄
                 <button id="headButton">이동</button>
             </p>
@@ -40,11 +40,27 @@
         // 선택한 책 표시
         let bookList = document.getElementsByClassName('bookList')
         for(index in bookList){
-            if(bookList[index].innerText == '{{bookInfo['name']}}'){
+            if(bookList[index].innerText == "{{bookInfo['name']}}"){
                 bookList[index].style['color']='black'
                 bookList[index].style['font-weight']='bold'
             }
         }
+        
+        // 버튼으로 이동하기
+        function movePage(){
+            let volumeInput = document.getElementById('headVolume')
+            let lineInput = document.getElementById('headLine')
+            if(volumeInput.value == {{bookInfo['volume']}}){
+                moveLine(lineInput.value)
+            }else{
+                window.location.href = '/' + "{{bookInfo['name']}}" + '/' + volumeInput.value + '/' + lineInput.value
+            }
+            
+
+        }
+        let moveBtn = document.getElementById('headButton')
+        moveBtn.addEventListener('click',movePage)
+        
     </script>
 {% endif %}
 </body>
