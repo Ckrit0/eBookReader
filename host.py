@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import sqlCRUD as db
+import bookQueue
 import requests
 
 def get_external_ip(): # 나중에 지울 예정
@@ -10,14 +11,25 @@ def get_external_ip(): # 나중에 지울 예정
   except Exception as e:
     print('Error: ',e)
     return 'ip_check_error'
+
+def initBookInfo(): # bookInfo 초기화
+  bookInfo = {
+    'name' : '',
+    'volume' : 0,
+    'line' : bookQ.getLine(),
+    'lastVolume' : getLastVolume(),
+  }
+  return bookInfo
+
+def getLastVolume(): # 임시값. 서버에서 받아와야 함.
+  return 5
+
+def getContents():
+  return ['line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line'] # 임시값. 서버에서 받아와야 함
   
 # 변수 모음
-bookInfo = {
-  'name' : '',
-  'volume' : 0,
-  'line' : 0,
-  'lastVolume' : 0,
-}
+bookQ = bookQueue.BookQueue()
+bookInfo = initBookInfo()
 bookList = ['t1','te2','tes3','test4','testt5','testte6','testtes7','testtest8'] # 임시값. 서버에서 받아와야함.
 adminPw = "test"
 isAdmin = False
@@ -30,21 +42,32 @@ def main():
 
 @app.route("/<bookName>")
 def selectVolume(bookName):
+  bookInfo = initBookInfo()
   bookInfo['name'] = bookName
-  bookInfo['volume'] = 0
-  bookInfo['line'] = 0
+  bookInfo['lastVolume'] = getLastVolume()
   volumes = [1,2,3,4,5] # 임시값. 서버에서 받아와야 함
-  bookInfo['lastVolume'] = len(volumes)
   return render_template('selectVolume.html', bookList=bookList, bookInfo=bookInfo, volumes=volumes)
 
 @app.route("/<bookName>/<volume>")
 def viewContents(bookName, volume):
-  #data=db.getData()
+  lastVolume = getLastVolume()
+  bookInfo = initBookInfo()
   bookInfo['name'] = bookName
-  bookInfo['volume'] = int(volume)
-  bookInfo['line'] = 0
-  contents = ['line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line'] # 임시값. 서버에서 받아와야 함
+  try :
+    if int(volume) > lastVolume:
+      volume = lastVolume
+    bookInfo['volume'] = int(volume)
+  except :
+    bookInfo['volume'] = bookQ.getVolume()
+  bookInfo['lastVolume'] = getLastVolume()
+  contents = getContents()
   return render_template('contents.html', bookList=bookList, bookInfo=bookInfo, contents = contents)
+
+@app.route("/<bookName>/<volume>/<line>")
+def viewContentsForLine(bookName, volume, line):
+  bookQ.setLine(line=line)
+  bookQ.setVolume(volume=volume)
+  return redirect(url_for('viewContents',bookName=bookName, volume=volume))
 
 @app.route("/admin",methods=["GET"])
 def password():
