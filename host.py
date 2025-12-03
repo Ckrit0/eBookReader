@@ -25,7 +25,10 @@ def getLastVolume(): # 임시값. 서버에서 받아와야 함.
   return 5
 
 def getContents():
-  return ['line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line','line'] # 임시값. 서버에서 받아와야 함
+  tmpLines = []
+  for i in range(100):
+    tmpLines.append('line' + (str(i+1)))
+  return tmpLines
   
 # 변수 모음
 bookQ = bookQueue.BookQueue()
