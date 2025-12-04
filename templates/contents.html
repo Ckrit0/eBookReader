@@ -5,7 +5,7 @@
         {% if bookInfo['volume'] <= 1 %}
             <div id="contentPrev"><span onclick="noExistPage(0)">《</span></div>
         {% else %}
-            <div id="contentPrev"><a href="/{{bookInfo['name']}}/{{bookInfo['volume']-1}}">《</a></div>
+            <div id="contentPrev"><a href="/read/{{bookInfo['name']}}/{{bookInfo['volume']-1}}">《</a></div>
         {% endif %}
         <div id="contentLine">
             {% for content in contents %}
@@ -15,7 +15,7 @@
         {% if bookInfo['volume'] >= bookInfo['lastVolume'] %}
             <div id="contentNext"><span onclick="noExistPage(1)">》</span></div>
         {% else %}
-            <div id="contentNext"><a href="/{{bookInfo['name']}}/{{bookInfo['volume']+1}}">》</a></div>
+            <div id="contentNext"><a href="/read/{{bookInfo['name']}}/{{bookInfo['volume']+1}}">》</a></div>
         {% endif %}
         
         <script>
@@ -88,7 +88,7 @@
             }
 
             // 라인 초기 이동
-            moveLine({{bookInfo['line']}})
+            moveLine("{{bookInfo['line']}}")
             
         </script>
     </div>
