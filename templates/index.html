@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     {% if bookInfo %}
-        <title>eBookReader - {{bookInfo['name']}} ({{bookInfo['value']}})</title>
+        <title>eBookReader - {{bookInfo['name']}} ({{bookInfo['volume']}})</title>
     {% else %}
         <title>eBookReader</title>
     {% endif %}
@@ -25,7 +25,7 @@
     <sidebar id="sidebar">
         <ul>
             {% for bookName in bookList %}
-                <a href="/{{bookName}}"><li class="bookList">{{bookName}}</li></a>
+                <a href="/read/{{bookName}}"><li class="bookList">{{bookName}}</li></a>
             {% endfor %}
         </ul>
     </sidebar>
@@ -48,10 +48,10 @@
         
         // 상단바 이동
         function movePage(){
-            if(volumeInput.value == {{bookInfo['volume']}}){
+            if(volumeInput.value == "{{bookInfo['volume']}}"){
                 moveLine(lineInput.value)
             }else{
-                window.location.href = '/' + "{{bookInfo['name']}}" + '/' + volumeInput.value + '/' + lineInput.value
+                window.location.href = "/read/{{bookInfo['name']}}/" + volumeInput.value + '/' + lineInput.value
             }
         }
         let volumeInput = document.getElementById('headVolume')
