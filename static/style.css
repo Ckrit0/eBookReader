@@ -91,10 +91,6 @@ a{
 
 /* 사이드바 관련 스타일 */
 
-.bookList{
-    
-}
-
 .bookList:hover{
     color: blue;
     font-weight: bold;
@@ -102,10 +98,6 @@ a{
 }
 
 /* 볼륨 선택 관련 스타일 */
-
-.volume{
-    
-}
 
 .volume:hover{
     color: blue;
@@ -157,4 +149,10 @@ a{
     overflow: auto;
     padding: 0 10px;
     color: black;
+}
+
+/* test 관련 */
+
+.test{
+    background: pink;
 }
