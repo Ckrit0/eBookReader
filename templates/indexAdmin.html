@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% if bookInfo %}
+        <title>eBookReader - {{bookInfo['name']}} ({{bookInfo['volume']}})</title>
+    {% else %}
+        <title>eBookReader</title>
+    {% endif %}
+</head>
+<body>
+    <header id="header" class="test">
+        <a href="/"><h2 id="headTitle">eBookReader</h2></a>
+        {% if bookInfo %}
+            <p>
+                <span id="headName">{{bookInfo['name']}} </span>
+                / <input id="headVolume" class="headInput" name="headValue" type="text" value="{{bookInfo['volume']}}" />권(화)
+                / <input id="headLine" class="headInput" name="headLine" type="text" value="{{bookInfo['line']}}" />줄
+                <button id="headButton">이동</button>
+            </p>
+        {% endif %}
+    </header>
+    <sidebar id="sidebar">
+        <ul>
+            {% for bookName in bookList %}
+                <a href="/admin/{{bookName}}"><li class="bookList">{{bookName}}</li></a>
+            {% endfor %}
+        </ul>
+    </sidebar>
+    <contents id="contents">
+        {% block content %} {% endblock %}
+    </contents>
+    <footer id="footer">
+        CkriT (ckrit3@gmail.com)
+    </footer>
+{% if bookInfo %}
+    <script>
+        // 선택한 책 표시
+        let bookList = document.getElementsByClassName('bookList')
+        for(index in bookList){
+            if(bookList[index].innerText == "{{bookInfo['name']}}"){
+                bookList[index].style['color']='black'
+                bookList[index].style['font-weight']='bold'
+            }
+        }
+        
+        // 상단바 이동
+        function movePage(){
+            if(volumeInput.value == "{{bookInfo['volume']}}"){
+                moveLine(lineInput.value)
+            }else{
+                window.location.href = "/admin/{{bookInfo['name']}}/" + volumeInput.value + '/' + lineInput.value
+            }
+        }
+        let volumeInput = document.getElementById('headVolume')
+        let lineInput = document.getElementById('headLine')
+        let moveBtn = document.getElementById('headButton')
+        volumeInput.addEventListener('keydown',(e)=>{
+            if(e.key == 'Enter'){
+                movePage()
+            }
+        })
+        lineInput.addEventListener('keydown',(e)=>{
+            if(e.key == 'Enter'){
+                movePage()
+            }
+        })
+        moveBtn.addEventListener('click',movePage)
+
+        
+    </script>
+{% endif %}
+</body>
+</html>
