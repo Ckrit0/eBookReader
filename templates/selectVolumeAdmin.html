@@ -1,0 +1,9 @@
+{% extends 'indexAdmin.html' %}
+
+{% block content %}
+    <ul>
+        {% for volume in volumes %}
+            <a href="/admin/{{bookInfo['name']}}/{{volume}}"><li class="volume">{{volume}}</li></a>
+        {% endfor %}
+    </ul>
+{% endblock %}
