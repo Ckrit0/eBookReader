@@ -25,6 +25,7 @@ def getCursor():
         print('Connect Error:',e)
     return con, cur
 
+############## 샘플 ##################
 def getData():
     data = []
     sql='SELECT * FROM CONTENT'
@@ -38,3 +39,39 @@ def getData():
     con.close()
     return data
 
+
+################
+## DB 연결부분 ##
+################
+
+# 도서 목록 받아오기
+def getBookList():
+  tempBooks = []
+  for i in range(10):
+    tempBooks.append('Book' + (str(i+1)))
+  return tempBooks
+
+# 해당 도서 마지막권(화) 받아오기
+def getLastVolume(bookName):
+  if bookName == '':
+    return 0
+  
+  return 5
+
+# 해당 도서 모든 권(화) 받아오기
+def getVolumes(bookName):
+  tempVolume = []
+  for i in range(15):
+    tempVolume.append(i+1)
+  return tempVolume
+
+# 해당 도서 해당 권(화) 내용 받아오기
+def getContents(bookName, volume):
+  tmpLines = []
+  for i in range(100):
+    tmpLines.append('line' + (str(i+1)))
+  return tmpLines
+
+# 관리자 비번 받아오기
+def getAdminPw():
+  return 'test'
