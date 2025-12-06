@@ -1,44 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlCRUD as db
 import bookQueue
-import requests
-
-
-################
-## DB 연결부분 ##
-################
-
-# 도서 목록 받아오기
-def getBookList():
-  tempBooks = []
-  for i in range(10):
-    tempBooks.append('Book' + (str(i+1)))
-  return tempBooks
-
-# 해당 도서 마지막권(화) 받아오기
-def getLastVolume(bookName):
-  if bookName == '':
-    return 0
-  
-  return 5
-
-# 해당 도서 모든 권(화) 받아오기
-def getVolumes(bookName):
-  tempVolume = []
-  for i in range(15):
-    tempVolume.append(i+1)
-  return tempVolume
-
-# 해당 도서 해당 권(화) 내용 받아오기
-def getContents(bookName, volume):
-  tmpLines = []
-  for i in range(100):
-    tmpLines.append('line' + (str(i+1)))
-  return tmpLines
-
-# 관리자 비번 받아오기
-def getAdminPw():
-  return 'test'
 
 # bookInfo 초기화
 def initBookInfo():
@@ -46,13 +8,13 @@ def initBookInfo():
     'name' : '',
     'volume' : 0,
     'line' : bookQ.getLine(),
-    'lastVolume' : getLastVolume(''),
+    'lastVolume' : db.getLastVolume(''),
   }
   return bookInfo
 
 bookQ = bookQueue.BookQueue()
 bookInfo = initBookInfo()
-bookList = getBookList()
+bookList = db.getBookList()
 isAdmin = False
 
 
@@ -72,14 +34,14 @@ def main():
 def selectVolume(bookName):
   bookInfo = initBookInfo()
   bookInfo['name'] = bookName
-  bookInfo['lastVolume'] = getLastVolume(bookName=bookName)
-  volumes = getVolumes(bookName=bookName)
+  bookInfo['lastVolume'] = db.getLastVolume(bookName=bookName)
+  volumes = db.getVolumes(bookName=bookName)
   return render_template('selectVolume.html', bookList=bookList, bookInfo=bookInfo, volumes=volumes)
 
 # /도서명/권(화)
 @app.route("/read/<bookName>/<volume>")
 def viewContents(bookName, volume):
-  lastVolume = getLastVolume(bookName=bookName)
+  lastVolume = db.getLastVolume(bookName=bookName)
   try :
     volume = int(volume)
   except :
@@ -90,7 +52,7 @@ def viewContents(bookName, volume):
   bookInfo['name'] = bookName
   bookInfo['volume'] = volume
   bookInfo['lastVolume'] = lastVolume
-  contents = getContents(bookName=bookName,volume=volume)
+  contents = db.getContents(bookName=bookName,volume=volume)
   return render_template('contents.html', bookList=bookList, bookInfo=bookInfo, contents = contents)
 
 # /도서명/권(화)/줄
@@ -116,7 +78,7 @@ def admin():
     global isAdmin
     if isAdmin:
       return render_template('admin.html', bookList=bookList)
-    elif request.form['password'] == getAdminPw():
+    elif request.form['password'] == db.getAdminPw():
       isAdmin = True
       return render_template('indexAdmin.html', bookList=bookList)
     else:
@@ -130,8 +92,8 @@ def selectVolumeAdmin(bookName):
     return redirect(url_for(password()))
   bookInfo = initBookInfo()
   bookInfo['name'] = bookName
-  bookInfo['lastVolume'] = getLastVolume(bookName=bookName)
-  volumes = getVolumes(bookName=bookName)
+  bookInfo['lastVolume'] = db.getLastVolume(bookName=bookName)
+  volumes = db.getVolumes(bookName=bookName)
   return render_template('selectVolumeAdmin.html', bookList=bookList, bookInfo=bookInfo, volumes=volumes)
 
 # /admin/도서명/권(화)
@@ -140,7 +102,7 @@ def viewContentsAdmin(bookName, volume):
   global isAdmin
   if not isAdmin:
     return redirect(url_for(password()))
-  lastVolume = getLastVolume(bookName=bookName)
+  lastVolume = db.getLastVolume(bookName=bookName)
   try :
     volume = int(volume)
   except :
@@ -151,7 +113,7 @@ def viewContentsAdmin(bookName, volume):
   bookInfo['name'] = bookName
   bookInfo['volume'] = volume
   bookInfo['lastVolume'] = lastVolume
-  contents = getContents(bookName=bookName,volume=volume)
+  contents = db.getContents(bookName=bookName,volume=volume)
   return render_template('contentsAdmin.html', bookList=bookList, bookInfo=bookInfo, contents = contents)
 
 # /admin/도서명/권(화)/줄
