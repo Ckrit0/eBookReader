@@ -126,11 +126,55 @@ def viewContentsForLineAdmin(bookName, volume, line):
   bookQ.setVolume(volume=int(volume))
   return redirect(url_for('viewContentsAdmin',bookName=bookName, volume=volume))
 
+############################ 기능 미구현 ########################################
+@app.route("/insert/<bookName>",methods=["POST"])
+def insertBookName(bookName):
+  pass
 
-      
+@app.route("/insert/<bookName>/<volume>/<contents>",methods=["POST"])
+def insertBookContents(bookName,volume,contents):
+  pass
+
+@app.route("/update/<bookName>",methods=["POST"])
+def updateBookName(bookName):
+  pass
+
+@app.route("/update/<bookName>/<volume>",methods=["POST"])
+def updateBookVolume(bookName,volume):
+  newVolume = request.form['newVolume']
+  print('nowVol:',volume,', newVol:',newVolume)
+  return redirect(url_for('selectVolumeAdmin',bookName=bookName))
+
+@app.route("/update/<bookName>/<volume>/<contents>",methods=["POST"])
+def updateBookContents(bookName,volume,contents):
+  pass
+
+@app.route("/update/<bookName>/<volume>/<line>/<redLine>",methods=["POST"])
+def updateBookContent(bookName,volume,line,redLine):
+  content = request.form['content']
+# db에 content로 line update 해야함.
+  return redirect(url_for('viewContentsForLineAdmin',bookName=bookName,volume=volume,line=redLine))
+
+@app.route("/delete/<bookName>",methods=["POST"])
+def deleteBookName(bookName):
+  pass
+
+@app.route("/delete/<bookName>/<volume>",methods=["POST"])
+def deleteBookVolume(bookName,volume):
+  pass
+
+@app.route("/delete/<bookName>/<volume>/<line>",methods=["POST"])
+def deleteBookContent(bookName,volume,line):
+# db에 line delete해야함. (근데 이거 그럼 라인 정렬 다시 해야하는건데..)
+  return redirect(url_for('viewContentsForLineAdmin',bookName=bookName,volume=volume,line=line))
+
+
+
+
   
 
 if __name__ == '__main__':
   app.run(
+    debug=True,
     host='0.0.0.0'
   )
