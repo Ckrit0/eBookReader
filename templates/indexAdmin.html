@@ -5,14 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     {% if bookInfo %}
-        <title>eBookReader - {{bookInfo['name']}} ({{bookInfo['volume']}})</title>
+        <title>eBookReader(adm) - {{bookInfo['name']}} ({{bookInfo['volume']}})</title>
     {% else %}
-        <title>eBookReader</title>
+        <title>eBookReader(adm)</title>
     {% endif %}
 </head>
 <body>
+    <script>
+        // 클릭 애니메이션 (이중 클릭 방지)
+        function imWorking(target){
+            target.onclick = null
+            target.innerText = '🌀'
+            target.classList.add('working')
+        }
+
+        // post 요청하기
+        function postAPI(url, data){
+            let form = document.createElement('form')
+            form.method = 'post'
+            form.action = url
+            document.body.appendChild(form)
+            for(let key in data){
+                let dataInput = document.createElement('input')
+                dataInput.name = key
+                dataInput.value = data[key]
+                form.appendChild(dataInput)
+            }
+            form.submit()
+        }
+    </script>
     <header id="header" class="test">
-        <a href="/"><h2 id="headTitle">eBookReader</h2></a>
+        <a href="/"><h2 id="headTitle">eBookReader(end Adm)</h2></a>
         {% if bookInfo %}
             <p>
                 <span id="headName">{{bookInfo['name']}} </span>
@@ -25,7 +48,11 @@
     <sidebar id="sidebar">
         <ul>
             {% for bookName in bookList %}
-                <a href="/admin/{{bookName}}"><li class="bookList">{{bookName}}</li></a>
+                <li id="li{{bookName}}" class="bookList">
+                    <a href="/admin/{{bookName}}"><span>{{bookName}}</span></a>
+                    <span id="mod{{bookName}}">✏️</span>
+                    <span id="del{{bookName}}">❌</span>
+                </li>
             {% endfor %}
         </ul>
     </sidebar>
