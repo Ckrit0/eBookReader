@@ -98,6 +98,15 @@ a{
 }
 
 /* 볼륨 선택 관련 스타일 */
+.volume{
+    display: inline-block;
+    margin: 3px 5px;
+    padding: 2px 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    font-size: 20px;
+    text-align: center;
+}
 
 .volume:hover{
     color: blue;
@@ -151,8 +160,29 @@ a{
     color: black;
 }
 
+.lineBtn{
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.c_line:hover{
+    color: blue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 /* test 관련 */
 
 .test{
     background: pink;
+}
+
+.working{
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
