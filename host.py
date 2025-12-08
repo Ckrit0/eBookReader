@@ -161,7 +161,8 @@ def deleteBookName(bookName):
 
 @app.route("/delete/<bookName>/<volume>",methods=["POST"])
 def deleteBookVolume(bookName,volume):
-  pass
+  #db 볼륨 삭제, 볼륨들 땡겨서 순서 맞추기
+  return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/delete/<bookName>/<volume>/<line>",methods=["POST"])
 def deleteBookContent(bookName,volume,line):
