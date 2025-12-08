@@ -1,9 +1,57 @@
 {% extends 'indexAdmin.html' %}
 
 {% block content %}
+    <script>
+        // 볼륨 추가 관련
+        function insertVolume(){
+            // 이건 insert 페이지를 새로 만들어야할듯
+        }
+
+        // 볼륨 수정 관련
+        function changeInput(lineId){
+            // content를 input으로 변경(a 태그 무력화를 위해 a태그 자체를 변경)
+            let target = document.getElementById('box' + lineId)
+            let content = target.innerText
+            let aTag = target.parentElement
+            aTag.outerHTML = "<input id='box" + lineId + "' value='" + content + "'/>"
+            // 수정버튼의 기능 변경
+            let targetBtn = document.getElementById('modvol' + lineId)
+            targetBtn.onclick = ()=>{changeVolume(lineId)}
+            targetBtn.innerText = '✅'
+        }
+
+        function changeVolume(lineId){
+            let targetBtn = document.getElementById('modvol' + lineId)
+            imWorking(targetBtn)
+            let volume = document.getElementById('box' + lineId).value
+            let data = {
+                'newVolume' : volume
+            }
+            let targetURL = "/update/{{bookInfo['name']}}/{{bookInfo['volume']}}"
+            postAPI(targetURL, data)
+        }
+
+        // 볼륨 삭제 관련
+        function deleteVolume(lineId){
+            if(!confirm('볼륨을 삭제하시겠습니까?')){
+                return
+            }
+            let targetBtn = document.getElementById('delvol' + lineId)
+            imWorking(targetBtn)
+            let targetURL = "/delete/{{bookInfo['name']}}/{{bookInfo['volume']}}"
+            let data = {}
+            postAPI(targetURL, data)
+        }
+        
+    </script>
     <ul>
         {% for volume in volumes %}
-            <a href="/admin/{{bookInfo['name']}}/{{volume}}"><li class="volume">{{volume}}</li></a>
+            <li class="volume">
+                <a href="/admin/{{bookInfo['name']}}/{{volume}}"><span id="box{{loop.index}}">{{volume}}</span></a><br>
+                <span id="modvol{{loop.index}}" class="lineBtn" onclick="changeInput('{{loop.index}}')">✏️</span>
+                <span id="delvol{{loop.index}}" class="lineBtn" onclick="deleteVolume('{{loop.index}}')">❌</span>
+            </li>
         {% endfor %}
+        <li class="volume">➕</li>
     </ul>
 {% endblock %}
