@@ -137,7 +137,7 @@ def insertBookContents(bookName,volume,contents):
 
 @app.route("/update/<bookName>",methods=["POST"])
 def updateBookName(bookName):
-  pass
+  return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/update/<bookName>/<volume>",methods=["POST"])
 def updateBookVolume(bookName,volume):
@@ -157,7 +157,7 @@ def updateBookContent(bookName,volume,line,redLine):
 
 @app.route("/delete/<bookName>",methods=["POST"])
 def deleteBookName(bookName):
-  pass
+  return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/delete/<bookName>/<volume>",methods=["POST"])
 def deleteBookVolume(bookName,volume):
