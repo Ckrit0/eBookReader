@@ -3,22 +3,39 @@
 {% block content %}
     <script>
         // 컨텐츠 수정 관련
-        function changeInput(lineId){
+        function changeContentInput(lineId){
             // content를 input으로 변경
-            let target = document.getElementById('box' + lineId)
+            let target = document.getElementById('boxline' + lineId)
             let content = target.innerText
-            target.outerHTML = "<input id='box" + lineId + "' value='" + content + "'/>"
+            target.outerHTML = "<input id='boxline" + lineId + "' value='" + content + "'/>"
             // 수정버튼의 기능 변경
             let targetBtn = document.getElementById('modline' + lineId)
             targetBtn.onclick = ()=>{changeContent(lineId)}
             targetBtn.innerText = '✅'
+            // Input에 focus 및 keydown EventListener 설정
+            let targetInput = document.getElementById('boxline' + lineId)
+            targetInput.focus()
+            var tempValue = '' // 커서를 맨 뒤로 보내기 위한 과정
+            tempValue = targetInput.value
+            targetInput.value = ''
+            targetInput.value = tempValue
+            targetInput.addEventListener('keydown',(e)=>{
+                if(e.key == 'Enter'){
+                    changeContent(lineId)
+                }else if(e.key == 'Escape'){
+                    cancelChange()
+                }
+            })
+            // X 버튼의 기능 변경 (삭제에서 수정 취소로..)
+            let targetDelBtn = document.getElementById('delline' + lineId)
+            targetDelBtn.onclick = ()=>{cancelChange()}
         }
 
         // DB에 line update
         function changeContent(lineId){
             let targetBtn = document.getElementById('modline' + lineId)
             imWorking(targetBtn)
-            let content = document.getElementById('box' + lineId).value
+            let content = document.getElementById('boxline' + lineId).value
             let redirectionLine = document.getElementById('headLine').value
             let data = {
                 'content' : content
@@ -49,8 +66,8 @@
             <div id="modAllDiv"><button id="modAllBtn">전체 수정</button></div>
             {% for content in contents %}
                 <p id="c_{{loop.index}}" class="c_line">
-                    <span id="box{{loop.index}}">{{content}}</span>
-                    <span id="modline{{loop.index}}" class="lineBtn" onclick="changeInput('{{loop.index}}')">✏️</span>
+                    <span id="boxline{{loop.index}}">{{content}}</span>
+                    <span id="modline{{loop.index}}" class="lineBtn" onclick="changeContentInput('{{loop.index}}')">✏️</span>
                     <span id="delline{{loop.index}}" class="lineBtn" onclick="deleteLine('{{loop.index}}')">❌</span>
                 </p>
             {% endfor %}
