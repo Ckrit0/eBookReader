@@ -179,34 +179,3 @@ a{
     font-weight: bold;
     cursor: pointer;
 }
-
-/* test 관련 */
-
-.test{
-    background: var(--adm-color);
-}
-
-.working{
-    display: inline-block;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-#modAllDiv{
-    position: sticky;
-    top: 0px;
-    text-align: right;
-}
-
-#modAllBtn{
-    color: var(--main-theme-color);
-}
-
-#modAllBtn:hover{
-    color: black;
-    font-weight: bold;
-}
