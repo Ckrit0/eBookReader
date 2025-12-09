@@ -8,22 +8,39 @@
         }
 
         // 볼륨 수정 관련
-        function changeInput(lineId){
+        function changeVolumeInput(lineId){
             // content를 input으로 변경(a 태그 무력화를 위해 a태그 자체를 변경)
-            let target = document.getElementById('box' + lineId)
-            let content = target.innerText
+            let target = document.getElementById('boxvol' + lineId)
+            let vol = target.innerText
             let aTag = target.parentElement
-            aTag.outerHTML = "<input id='box" + lineId + "' value='" + content + "'/>"
+            aTag.outerHTML = "<input id='boxvol" + lineId + "' value='" + vol + "'/>"
             // 수정버튼의 기능 변경
             let targetBtn = document.getElementById('modvol' + lineId)
             targetBtn.onclick = ()=>{changeVolume(lineId)}
             targetBtn.innerText = '✅'
+            // Input에 focus 및 keydown EventListener 설정
+            let targetInput = document.getElementById('boxvol' + lineId)
+            targetInput.focus()
+            var tempValue = '' // 커서를 맨 뒤로 보내기 위한 과정
+            tempValue = targetInput.value
+            targetInput.value = ''
+            targetInput.value = tempValue
+            targetInput.addEventListener('keydown',(e)=>{
+                if(e.key == 'Enter'){
+                    changeVolume(lineId)
+                }else if(e.key == 'Escape'){
+                    cancelChange()
+                }
+            })
+            // X 버튼의 기능 변경 (삭제에서 수정 취소로..)
+            let targetDelBtn = document.getElementById('delvol' + lineId)
+            targetDelBtn.onclick = ()=>{cancelChange()}
         }
 
         function changeVolume(lineId){
             let targetBtn = document.getElementById('modvol' + lineId)
             imWorking(targetBtn)
-            let volume = document.getElementById('box' + lineId).value
+            let volume = document.getElementById('boxvol' + lineId).value
             let data = {
                 'newVolume' : volume
             }
@@ -47,8 +64,8 @@
     <ul>
         {% for volume in volumes %}
             <li class="volume">
-                <a href="/admin/{{bookInfo['name']}}/{{volume}}"><span id="box{{loop.index}}">{{volume}}</span></a><br>
-                <span id="modvol{{loop.index}}" class="lineBtn" onclick="changeInput('{{loop.index}}')">✏️</span>
+                <a href="/admin/{{bookInfo['name']}}/{{volume}}"><span id="boxvol{{loop.index}}">{{volume}}</span></a><br>
+                <span id="modvol{{loop.index}}" class="lineBtn" onclick="changeVolumeInput('{{loop.index}}')">✏️</span>
                 <span id="delvol{{loop.index}}" class="lineBtn" onclick="deleteVolume('{{loop.index}}')">❌</span>
             </li>
         {% endfor %}
