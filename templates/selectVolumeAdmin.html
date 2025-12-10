@@ -1,74 +1,14 @@
 {% extends 'indexAdmin.html' %}
 
 {% block content %}
-    <script>
-        // 볼륨 추가 관련
-        function insertVolume(){
-            // 이건 insert 페이지를 새로 만들어야할듯
-        }
-
-        // 볼륨 수정 관련
-        function changeVolumeInput(lineId){
-            // content를 input으로 변경(a 태그 무력화를 위해 a태그 자체를 변경)
-            let target = document.getElementById('boxvol' + lineId)
-            let vol = target.innerText
-            let aTag = target.parentElement
-            aTag.outerHTML = "<input id='boxvol" + lineId + "' value='" + vol + "'/>"
-            // 수정버튼의 기능 변경
-            let targetBtn = document.getElementById('modvol' + lineId)
-            targetBtn.onclick = ()=>{changeVolume(lineId)}
-            targetBtn.innerText = '✅'
-            // Input에 focus 및 keydown EventListener 설정
-            let targetInput = document.getElementById('boxvol' + lineId)
-            targetInput.focus()
-            var tempValue = '' // 커서를 맨 뒤로 보내기 위한 과정
-            tempValue = targetInput.value
-            targetInput.value = ''
-            targetInput.value = tempValue
-            targetInput.addEventListener('keydown',(e)=>{
-                if(e.key == 'Enter'){
-                    changeVolume(lineId)
-                }else if(e.key == 'Escape'){
-                    cancelChange()
-                }
-            })
-            // X 버튼의 기능 변경 (삭제에서 수정 취소로..)
-            let targetDelBtn = document.getElementById('delvol' + lineId)
-            targetDelBtn.onclick = ()=>{cancelChange()}
-        }
-
-        function changeVolume(lineId){
-            let targetBtn = document.getElementById('modvol' + lineId)
-            imWorking(targetBtn)
-            let volume = document.getElementById('boxvol' + lineId).value
-            let data = {
-                'newVolume' : volume
-            }
-            let targetURL = "/update/{{bookInfo['name']}}/{{bookInfo['volume']}}"
-            postAPI(targetURL, data)
-        }
-
-        // 볼륨 삭제 관련
-        function deleteVolume(lineId){
-            if(!confirm('볼륨을 삭제하시겠습니까?')){
-                return
-            }
-            let targetBtn = document.getElementById('delvol' + lineId)
-            imWorking(targetBtn)
-            let targetURL = "/delete/{{bookInfo['name']}}/{{bookInfo['volume']}}"
-            let data = {}
-            postAPI(targetURL, data)
-        }
-        
-    </script>
-    <ul>
-        {% for volume in volumes %}
-            <li class="volume">
-                <a href="/admin/{{bookInfo['name']}}/{{volume}}"><span id="boxvol{{loop.index}}">{{volume}}</span></a><br>
-                <span id="modvol{{loop.index}}" class="lineBtn" onclick="changeVolumeInput('{{loop.index}}')">✏️</span>
-                <span id="delvol{{loop.index}}" class="lineBtn" onclick="deleteVolume('{{loop.index}}')">❌</span>
-            </li>
-        {% endfor %}
-        <li class="volume">➕</li>
-    </ul>
+<ul>
+    {% for volume in volumes %}
+    <li class="volume">
+        <a href="/admin/{{bookInfo['name']}}/{{volume}}"><span id="boxvol{{loop.index}}">{{volume}}</span></a><br>
+        <span id="modvol{{loop.index}}" class="lineBtn" onclick="changeInput('vol','{{loop.index}}')">✏️</span>
+        <span id="delvol{{loop.index}}" class="lineBtn" onclick="deleteTarget('vol','{{loop.index}}')">❌</span>
+    </li>
+    {% endfor %}
+    <li class="volume">➕</li>
+</ul>
 {% endblock %}
