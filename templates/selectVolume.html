@@ -3,7 +3,7 @@
 {% block content %}
     <ul>
         {% for volume in volumes %}
-            <a href="/read/{{bookInfo['name']}}/{{volume}}"><li class="volume">{{volume}}</li></a>
+        <a href="/read/{{bookInfo['name']}}/{{volume}}"><li class="volume">{{volume}}</li></a>
         {% endfor %}
     </ul>
 {% endblock %}
