@@ -141,7 +141,7 @@ def updateBookName(bookName):
 
 @app.route("/update/<bookName>/<volume>",methods=["POST"])
 def updateBookVolume(bookName,volume):
-  newVolume = request.form['newVolume']
+  newVolume = request.form['data']
   print('nowVol:',volume,', newVol:',newVolume)
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
@@ -151,7 +151,7 @@ def updateBookContents(bookName,volume,contents):
 
 @app.route("/update/<bookName>/<volume>/<line>/<redLine>",methods=["POST"])
 def updateBookContent(bookName,volume,line,redLine):
-  content = request.form['content']
+  content = request.form['data']
 # db에 content로 line update 해야함.
   return redirect(url_for('viewContentsForLineAdmin',bookName=bookName,volume=volume,line=redLine))
 
