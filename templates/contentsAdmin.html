@@ -1,155 +1,32 @@
 {% extends 'indexAdmin.html' %}
 
 {% block content %}
-    <script>
-        // 컨텐츠 수정 관련
-        function changeContentInput(lineId){
-            // content를 input으로 변경
-            let target = document.getElementById('boxline' + lineId)
-            let content = target.innerText
-            target.outerHTML = "<input id='boxline" + lineId + "' value='" + content + "'/>"
-            // 수정버튼의 기능 변경
-            let targetBtn = document.getElementById('modline' + lineId)
-            targetBtn.onclick = ()=>{changeContent(lineId)}
-            targetBtn.innerText = '✅'
-            // Input에 focus 및 keydown EventListener 설정
-            let targetInput = document.getElementById('boxline' + lineId)
-            targetInput.focus()
-            var tempValue = '' // 커서를 맨 뒤로 보내기 위한 과정
-            tempValue = targetInput.value
-            targetInput.value = ''
-            targetInput.value = tempValue
-            targetInput.addEventListener('keydown',(e)=>{
-                if(e.key == 'Enter'){
-                    changeContent(lineId)
-                }else if(e.key == 'Escape'){
-                    cancelChange()
-                }
-            })
-            // X 버튼의 기능 변경 (삭제에서 수정 취소로..)
-            let targetDelBtn = document.getElementById('delline' + lineId)
-            targetDelBtn.onclick = ()=>{cancelChange()}
-        }
-
-        // DB에 line update
-        function changeContent(lineId){
-            let targetBtn = document.getElementById('modline' + lineId)
-            imWorking(targetBtn)
-            let content = document.getElementById('boxline' + lineId).value
-            let redirectionLine = document.getElementById('headLine').value
-            let data = {
-                'content' : content
-            }
-            let targetURL = "/update/{{bookInfo['name']}}/{{bookInfo['volume']}}/" + lineId + "/" + redirectionLine
-            postAPI(targetURL, data)
-        }
-
-        // 컨텐트 삭제 관련
-        function deleteLine(lineId){
-            if(!confirm('라인을 삭제하시겠습니까?')){
-                return
-            }
-            let targetBtn = document.getElementById('delline' + lineId)
-            imWorking(targetBtn)
-            let targetURL = "/delete/{{bookInfo['name']}}/{{bookInfo['volume']}}/" + lineId
-            let data = {}
-            postAPI(targetURL, data)
-        }
-    </script>
-    <div id="contentContainer">
-        {% if bookInfo['volume'] <= 1 %}
-            <div id="contentPrev"><span onclick="noExistPage(0)">《</span></div>
-        {% else %}
-            <div id="contentPrev"><a href="/admin/{{bookInfo['name']}}/{{bookInfo['volume']-1}}">《</a></div>
-        {% endif %}
-        <div id="contentLine">
-            <div id="modAllDiv"><button id="modAllBtn">전체 수정</button></div>
-            {% for content in contents %}
-                <p id="c_{{loop.index}}" class="c_line">
-                    <span id="boxline{{loop.index}}">{{content}}</span>
-                    <span id="modline{{loop.index}}" class="lineBtn" onclick="changeContentInput('{{loop.index}}')">✏️</span>
-                    <span id="delline{{loop.index}}" class="lineBtn" onclick="deleteLine('{{loop.index}}')">❌</span>
-                </p>
-            {% endfor %}
-        </div>
-        {% if bookInfo['volume'] >= bookInfo['lastVolume'] %}
-            <div id="contentNext"><span onclick="noExistPage(1)">》</span></div>
-        {% else %}
-            <div id="contentNext"><a href="/admin/{{bookInfo['name']}}/{{bookInfo['volume']+1}}">》</a></div>
-        {% endif %}
-        
-        <script>
-            // 페이지 이동
-            function noExistPage(preOrNext){
-                if(preOrNext == 0){
-                    alert("첫 페이지입니다.")
-                }else{
-                    alert("마지막 페이지입니다.")
-                }
-            }
-
-            // 현재 라인 업데이트
-            let cl = document.getElementById('contentLine')
-            function findLine(){
-                let clRect = cl.getBoundingClientRect()
-                let coordX = ( clRect.left + clRect.right ) / 2
-                let coordY = clRect.top
-                let nowPages = []
-                for(var i=10; i<30; i+=10){
-                    nowPages.push(document.elementFromPoint(coordX, coordY + i).id.replace('c_',''))
-
-                }
-                for(var i=0; i<3; i++){
-                    if(!isNaN(nowPages[i])){
-                        document.getElementById('headLine').value = nowPages[i]
-                        break
-                    }
-                }
-            }
-            findLine() // 페이지 진입시 1회 실행
-            
-            // 스크롤 이벤트리스너 등록
-            cl.addEventListener('scroll',findLine)
-            document.addEventListener('keydown',(e)=>{
-                if(e.key == ' '){
-                    clSize = cl.getBoundingClientRect()
-                    cl.scrollBy({top:(clSize.bottom-clSize.top)*9/10,behavior:'smooth'})
-                }
-            })
-
-            // 원하는 라인으로 이동
-            function moveLine(toLineNumber){
-                function getLines(){
-                    let tempLines = cl.childNodes
-                    let lines = []
-                    for(var i=0; i<tempLines.length; i++){
-                        if(tempLines[i].id === undefined){
-                            
-                        }else{
-                            lines.push([i,tempLines[i].getBoundingClientRect().top])
-                        }
-                    }
-                    return lines
-                }
-                
-                function getScrollCoord(lines, toLineNumber){
-                    if(toLineNumber > lines.length){
-                        toLineNumber = lines[lines.length-1][1]
-                    }else if(toLineNumber < 1){
-                        toLineNumber = 1
-                    }
-                    var moveScrollCoord = lines[toLineNumber-1][1] - lines[0][1]
-                    return moveScrollCoord
-                }
-                
-                let lines = getLines()
-                let moveScrollCoord = getScrollCoord(lines,toLineNumber)
-                cl.scrollTo({top:moveScrollCoord,behavior:"smooth"})
-            }
-
-            // 라인 초기 이동
-            moveLine("{{bookInfo['line']}}")
-            
-        </script>
+<div id="contentContainer">
+    {% if bookInfo['volume'] <= 1 %}
+    <div id="contentPrev"><span onclick="noExistPage(0)">《</span></div>
+    {% else %}
+    <div id="contentPrev"><a href="/admin/{{bookInfo['name']}}/{{bookInfo['volume']-1}}">《</a></div>
+    {% endif %}
+    <div id="contentLine">
+        <div id="modAllDiv"><button id="modAllBtn">전체 수정</button></div>
+        {% for content in contents %}
+        <p id="c_{{loop.index}}" class="c_line">
+            <span id="boxline{{loop.index}}">{{content}}</span>
+            <span id="modline{{loop.index}}" class="lineBtn" onclick="changeInput('line','{{loop.index}}')">✏️</span>
+            <span id="delline{{loop.index}}" class="lineBtn" onclick="deleteTarget('line','{{loop.index}}')">❌</span>
+        </p>
+        {% endfor %}
     </div>
+    {% if bookInfo['volume'] >= bookInfo['lastVolume'] %}
+    <div id="contentNext"><span onclick="noExistPage(1)">》</span></div>
+    {% else %}
+    <div id="contentNext"><a href="/admin/{{bookInfo['name']}}/{{bookInfo['volume']+1}}">》</a></div>
+    {% endif %}
+</div>
+<script>
+    findLine()
+    setScrollEvent()
+    setSpaceEvent()
+    moveLine(bookInfo['line'])
+</script>
 {% endblock %}
