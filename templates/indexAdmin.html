@@ -17,117 +17,30 @@
         let bookList = {{bookList | tojson}}
     </script>
     {% endif %}
+    <script src="{{url_for('static',filename='script.js')}}"></script>
+    <script src="{{url_for('static',filename='scriptAdmin.js')}}"></script>
 </head>
 <body>
-    <script>
-        // 클릭 애니메이션 (이중 클릭 방지)
-        function imWorking(target){
-            target.onclick = null
-            target.innerText = '🌀'
-            target.classList.add('working')
-        }
-
-        // 수정 취소시 새로고침
-        function cancelChange(){
-            if(!confirm("수정을 취소하시겠습니까?")){
-                return
-            }
-            window.location.href = window.location.href
-        }
-
-        // post 요청하기
-        function postAPI(url, data){
-            let form = document.createElement('form')
-            form.method = 'post'
-            form.action = url
-            document.body.appendChild(form)
-            for(let key in data){
-                let dataInput = document.createElement('input')
-                dataInput.name = key
-                dataInput.value = data[key]
-                form.appendChild(dataInput)
-            }
-            form.submit()
-        }
-
-        // 도서 추가 관련
-        function insertBook(){
-            
-        }
-
-        // 도서 수정 관련
-        function changeBookInput(bookName){
-            // content를 input으로 변경(a 태그 무력화를 위해 a태그 자체를 변경)
-            let target = document.getElementById('boxbook' + bookName)
-            let book = target.innerText
-            let aTag = target.parentElement
-            aTag.outerHTML = "<input id='boxbook" + bookName + "' value='" + book + "'/>"
-            // 수정버튼의 기능 변경
-            let targetBtn = document.getElementById('modbook' + bookName)
-            targetBtn.onclick = ()=>{changeBook(bookName)}
-            targetBtn.innerText = '✅'
-            // Input에 focus 및 keydown EventListener 설정
-            let targetInput = document.getElementById('boxbook' + bookName)
-            targetInput.focus()
-            var tempValue = '' // 커서를 맨 뒤로 보내기 위한 과정
-            tempValue = targetInput.value
-            targetInput.value = ''
-            targetInput.value = tempValue
-            targetInput.addEventListener('keydown',(e)=>{
-                if(e.key == 'Enter'){
-                    changeBook(bookName)
-                }else if(e.key == 'Escape'){
-                    cancelChange()
-                }
-            })
-            // X 버튼의 기능 변경 (삭제에서 수정 취소로..)
-            let targetDelBtn = document.getElementById('delbook' + bookName)
-            targetDelBtn.onclick = ()=>{cancelChange()}
-        }
-
-        function changeBook(bookName){
-            let targetBtn = document.getElementById('modbook' + bookName)
-            imWorking(targetBtn)
-            let book = document.getElementById('boxbook' + bookName).value
-            let data = {
-                'newBook' : book
-            }
-            let targetURL = "/update/" + bookName
-            postAPI(targetURL, data)
-        }
-
-        // 도서 삭제 관련
-        function deleteBook(bookName){
-            if(!confirm('"' + bookName + '" 도서를 삭제하시겠습니까?')){
-                return
-            }
-            let targetBtn = document.getElementById('delbook' + bookName)
-            imWorking(targetBtn)
-            let targetURL = "/delete/" + bookName
-            let data = {}
-            postAPI(targetURL, data)
-        }
-    </script>
     <header id="header">
         <a href="/"><h2 id="headTitle">eBookReader(end Adm)</h2></a>
         {% if bookInfo %}
-            <p>
-                <span id="headName">{{bookInfo['name']}} </span>
-                / <input id="headVolume" class="headInput" name="headValue" type="text" value="{{bookInfo['volume']}}" />권(화)
-                / <input id="headLine" class="headInput" name="headLine" type="text" value="{{bookInfo['line']}}" />줄
-                <button id="headButton">이동</button>
-            </p>
+        <p>
+            <span id="headName">{{bookInfo['name']}} </span>
+            / <input id="headVolume" class="headInput" name="headValue" type="text" value="{{bookInfo['volume']}}" />권(화)
+            / <input id="headLine" class="headInput" name="headLine" type="text" value="{{bookInfo['line']}}" />줄
+            <button id="headButton">이동</button>
+        </p>
         {% endif %}
     </header>
     <sidebar id="sidebar">
         <ul>
             <li>- 제목순</li>
             {% for bookName in bookList %}
-                <li id="li{{bookName}}" class="bookList">
-                    <a href="/admin/{{bookName}}"><span id="boxbook{{bookName}}">{{bookName}}</span></a>
-                    <span id="modbook{{bookName}}" onclick="changeBookInput('{{bookName}}')">✏️</span>
-                    <span id="delbook{{bookName}}" onclick="deleteBook('{{bookName}}')">❌</span>
-                </li>
+            <li id="li{{bookName}}" class="bookList">
+                <a href="/admin/{{bookName}}"><span id="boxbook{{bookName}}">{{bookName}}</span></a>
+                <span id="modbook{{bookName}}" onclick="changeInput('book','{{bookName}}')">✏️</span>
+                <span id="delbook{{bookName}}" onclick="deleteTarget('book','{{bookName}}')">❌</span>
+            </li>
             {% endfor %}
             <li id="insbook" class="volume">➕</li>
         </ul>
@@ -139,41 +52,10 @@
         CkriT (ckrit3@gmail.com)
     </footer>
 {% if bookInfo %}
-    <script>
-        // 선택한 책 표시
-        let bookList = document.getElementsByClassName('bookList')
-        for(index in bookList){
-            if(bookList[index].innerText == "{{bookInfo['name']}}"){
-                bookList[index].style['color']='black'
-                bookList[index].style['font-weight']='bold'
-            }
-        }
-        
-        // 상단바 이동
-        function movePage(){
-            if(volumeInput.value == "{{bookInfo['volume']}}"){
-                moveLine(lineInput.value)
-            }else{
-                window.location.href = "/admin/{{bookInfo['name']}}/" + volumeInput.value + '/' + lineInput.value
-            }
-        }
-        let volumeInput = document.getElementById('headVolume')
-        let lineInput = document.getElementById('headLine')
-        let moveBtn = document.getElementById('headButton')
-        volumeInput.addEventListener('keydown',(e)=>{
-            if(e.key == 'Enter'){
-                movePage()
-            }
-        })
-        lineInput.addEventListener('keydown',(e)=>{
-            if(e.key == 'Enter'){
-                movePage()
-            }
-        })
-        moveBtn.addEventListener('click',movePage)
-
-        
-    </script>
+<script>
+    accentSelectBook()
+    useNavBar()
+</script>
 {% endif %}
 </body>
 </html>
