@@ -47,13 +47,15 @@ def viewContents(bookName, volume):
   except :
     volume = bookQ.getVolume()
   if volume > lastVolume:
-    return redirect(url_for('viewContents',bookName=bookName,volume=volume))
+    return redirect(url_for('viewContents',bookName=bookName,volume=lastVolume))
+  elif volume < 1:
+    return redirect(url_for('viewContents',bookName=bookName,volume=1))
   bookInfo = initBookInfo()
   bookInfo['name'] = bookName
   bookInfo['volume'] = volume
   bookInfo['lastVolume'] = lastVolume
   contents = db.getContents(bookName=bookName,volume=volume)
-  return render_template('contents.html', bookList=bookList, bookInfo=bookInfo, contents = contents)
+  return render_template('contents.html', bookList=bookList, bookInfo=bookInfo, contents=contents)
 
 # /도서명/권(화)/줄
 @app.route("/read/<bookName>/<volume>/<line>")
@@ -125,6 +127,35 @@ def viewContentsForLineAdmin(bookName, volume, line):
   bookQ.setLine(line=line)
   bookQ.setVolume(volume=int(volume))
   return redirect(url_for('viewContentsAdmin',bookName=bookName, volume=volume))
+
+# /insert/도서명
+@app.route("/insert/<bookName>")
+def insertContents(bookName):
+  global isAdmin
+  if not isAdmin:
+    return redirect(url_for(password()))
+  bookInfo = initBookInfo()
+  bookInfo['name'] = bookName
+  bookInfo['lastVolume'] = db.getLastVolume(bookName=bookName)
+  return render_template('insertContents.html', bookList=bookList, bookInfo=bookInfo, bookName=bookName)
+
+# /insert/도서명/권(화)
+@app.route("/insert/<bookName>/<volume>")
+def modifyContents(bookName, volume):
+  global isAdmin
+  if not isAdmin:
+    return redirect(url_for(password()))
+  bookInfo = initBookInfo()
+  bookInfo['name'] = bookName
+  bookInfo['volume'] = volume
+  bookInfo['lastVolume'] = db.getLastVolume(bookName=bookName)
+  contents = ""
+  tempContents = db.getContents(bookName=bookName,volume=volume)
+  for content in tempContents:
+    contents = contents + content + "\n"
+  contents = contents.rstrip('\n')
+  print(bookInfo['volume'])
+  return render_template('insertContents.html', bookList=bookList, bookInfo=bookInfo, bookName=bookName, contents=contents)
 
 ############################ 기능 미구현 ########################################
 @app.route("/insert/<bookName>",methods=["POST"])
