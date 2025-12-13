@@ -1,0 +1,16 @@
+{% extends 'indexAdmin.html' %}
+
+{% block content %}
+{% if contents %}
+<span>{{bookInfo['name']}} / {{bookInfo['volume']}} 권(화)</span>
+<button class="insBtn">완료</button>
+<button class="insBtn">취소</button><br>
+<textarea id="contentsArea">{{contents}}</textarea>
+{% else %}
+<span>{{bookInfo['name']}} / </span>
+<input id="insVolume" value="{{bookInfo['lastVolume']+1}}">권(화) 
+<button class="insBtn">완료</button>
+<button class="insBtn">취소</button><br>
+<textarea id="contentsArea"></textarea>
+{% endif %}
+{% endblock %}
