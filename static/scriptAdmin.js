@@ -45,7 +45,11 @@ function insertBook(){
 
 // 볼륨 추가 관련
 function insertVolume(){
-    
+    location.href = '/insert/' + bookInfo['name']
+}
+
+function modifyVolume(){
+    location.href = '/insert/' + bookInfo['name'] + '/' + bookInfo['volume']
 }
 
 /**
