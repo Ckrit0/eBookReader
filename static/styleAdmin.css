@@ -22,3 +22,20 @@
     color: black;
     font-weight: bold;
 }
+
+#insVolume{
+    color: var(--main-theme-color);
+}
+
+.insBtn{
+    margin: 10px 3px;
+}
+.insBtn:hover{
+    color: black;
+    font-weight: bold;
+}
+
+#contentsArea{
+    width: -webkit-fill-available;
+    height: 70vh;
+}
