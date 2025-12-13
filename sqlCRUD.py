@@ -56,7 +56,7 @@ def getLastVolume(bookName):
   if bookName == '':
     return 0
   
-  return 5
+  return 15
 
 # 해당 도서 모든 권(화) 받아오기
 def getVolumes(bookName):
