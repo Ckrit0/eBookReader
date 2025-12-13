@@ -9,6 +9,6 @@
         <span id="delvol{{loop.index}}" class="lineBtn" onclick="deleteTarget('vol','{{loop.index}}')">❌</span>
     </li>
     {% endfor %}
-    <li class="volume">➕</li>
+    <li class="volume" onclick="insertVolume()">➕</li>
 </ul>
 {% endblock %}
