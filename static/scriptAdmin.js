@@ -9,6 +9,15 @@ function imWorking(target){
 }
 
 /**
+ * 이전 페이지로 이동
+ */
+function prevPage(){
+    if(confirm("이전 페이지로 이동하시겠습니까?")){
+        history.go(-1)
+    }
+}
+
+/**
  * 수정 취소시 새로고침
  * @returns 
  */
@@ -40,17 +49,56 @@ function postAPI(url, data){
 
 // 도서 추가 관련
 function insertBook(){
-    
+    let bookName = prompt("도서명을 입력하세요")
+    let targetURL = "/insert/" + bookName
+    postAPI(targetURL,{})
 }
 
-// 볼륨 추가 관련
+/**
+ * 글 쓰기 페이지 이동
+ */
 function insertVolume(){
     location.href = '/insert/' + bookInfo['name']
 }
 
+/**
+ * 글 수정하기 페이지 이동
+ */
 function modifyVolume(){
     location.href = '/insert/' + bookInfo['name'] + '/' + bookInfo['volume']
 }
+
+/**
+ * 글 작성 DB 적용
+ */
+function insertContents(){
+    let targetVolume = ''
+    let targetTag = document.getElementById("insVolume")
+    if(targetTag.tagName == 'INPUT'){
+        targetVolume = document.getElementById("insVolume").value
+    }else{
+        targetVolume = document.getElementById("insVolume").innerText
+    }
+    if(bookInfo['lastVolume'] <= targetVolume && !confirm(targetVolume + "권(화)의 내용을 업데이트 하시겠습니까?")){
+        return
+    }
+    let targetURL = '/insert/' + bookInfo['name'] + '/' + targetVolume
+    let contents = document.getElementById("contentsArea").value
+    while(contents.indexOf('\n\n') >= 0){
+        contents = contents.replaceAll('\n\n','\n')
+    }
+    while(contents.indexOf('  ') >= 0){
+        contents = contents.replaceAll('  ',' ')
+    }
+    let contentList = contents.split('\n')
+    let data = {}
+    for(var i=0;i<contentList.length;i++){
+        data[i] = contentList[i]
+    }
+    postAPI(url=targetURL,data=data)
+}
+
+
 
 /**
  * 대상 수정을 위해 TAG 및 기능 변경
