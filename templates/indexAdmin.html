@@ -42,7 +42,7 @@
                 <span id="delbook{{bookName}}" onclick="deleteTarget('book','{{bookName}}')">❌</span>
             </li>
             {% endfor %}
-            <li id="insbook" class="volume">➕</li>
+            <li id="insbook" class="volume" onclick="insertBook()">➕</li>
         </ul>
     </sidebar>
     <contents id="contents">
