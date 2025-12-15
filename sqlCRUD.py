@@ -55,7 +55,7 @@ def getBookList():
 def getLastVolume(bookName):
   sql = f"SELECT MAX(VOLUME) FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}')"
   lastVolume = getData(sql)
-  lastVolume = lastVolume[0]
+  lastVolume = lastVolume[0][0]
   print('lastVolume:',lastVolume)
   return lastVolume
 
@@ -64,7 +64,7 @@ def getVolumes(bookName):
   sql = f"SELECT DISTINCT VOLUME FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}')"
   volumeList = list(getData(sql=sql))
   for volume in volumeList:
-     volume = volume[0]
+     volume = volume[0][0]
   print('volumeList:',volumeList)
   return volumeList
 
