@@ -164,8 +164,7 @@ def insertBookName(bookName):
   global isAdmin
   if not isAdmin:
     return redirect(url_for("password"))
-  # bookName DB INSERT 해야함
-  db.insertBook(bookName=bookName)
+  db.insertBook(bookName=bookName) # 즉시 반영 안됨 확인필요
   return redirect(url_for("admin"))
 
 @app.route("/insert/<bookName>/<volume>",methods=["POST"])
