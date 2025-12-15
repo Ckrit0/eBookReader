@@ -66,9 +66,9 @@ def getBookList():
 
 # 해당 도서 마지막권(화) 받아오기
 def getLastVolume(bookName):
-  sql = f"SELECT MAX(VOLUME) FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}')"
-  lastVolume = getData(sql)
-  return lastVolume[0]
+  sql = f"IFNULL(SELECT MAX(VOLUME) FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}'),0)"
+  lastVolume = getData(sql)[0]
+  return lastVolume
 
 # 해당 도서 모든 권(화) 받아오기
 def getVolumes(bookName):
@@ -85,8 +85,8 @@ def getContents(bookName, volume):
 # 관리자 비번 받아오기
 def getAdminPw():
   sql = f"SELECT PASSWORD FROM OPTIONS"
-  pw = getData(sql=sql)
-  return pw[0]
+  pw = getData(sql=sql)[0]
+  return pw
 
 def insertBook(bookName):
   sql = f"INSERT INTO INFO VALUES(IFNULL((SELECT MAX(BID)+1 FROM INFO),0),'{bookName}')"
