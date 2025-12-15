@@ -38,6 +38,7 @@ def getData(sql):
            tempList.append(r)
         data.append(tempList)
     con.close()
+    print(data)
     return data
 
 
@@ -47,7 +48,7 @@ def getData(sql):
 
 # 도서 목록 받아오기
 def getBookList():
-  sql = f"SELECT NAME FROM INFO ORDER BY NAME ASC"
+  sql = f"SELECT NAME, AUTHER FROM INFO ORDER BY NAME ASC"
   bookList = getData(sql=sql)
   return bookList
 
