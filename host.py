@@ -1,3 +1,5 @@
+# 관리자모드 세션방식으로 바꿔야 함
+
 from flask import Flask, render_template, request, redirect, url_for
 import sqlCRUD as db
 import bookQueue
@@ -163,6 +165,7 @@ def insertBookName(bookName):
   if not isAdmin:
     return redirect(url_for("password"))
   # bookName DB INSERT 해야함
+  db.insertBook(bookName=bookName)
   return redirect(url_for("admin"))
 
 @app.route("/insert/<bookName>/<volume>",methods=["POST"])
@@ -183,7 +186,7 @@ def updateBookName(bookName):
   global isAdmin
   if not isAdmin:
     return redirect(url_for("password"))
-  # DB 해야함
+  # DB UPDATE 해야함
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/update/<bookName>/<volume>",methods=["POST"])
@@ -192,7 +195,7 @@ def updateBookVolume(bookName,volume):
   if not isAdmin:
     return redirect(url_for("password"))
   newVolume = request.form['data']
-  # DB 해야함
+  # DB UPDATE 해야함
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/update/<bookName>/<volume>/<line>/<redLine>",methods=["POST"])
@@ -209,7 +212,7 @@ def deleteBookName(bookName):
   global isAdmin
   if not isAdmin:
     return redirect(url_for("password"))
-  # DB 해야함
+  # DB DELETE 해야함
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/delete/<bookName>/<volume>",methods=["POST"])
@@ -217,7 +220,7 @@ def deleteBookVolume(bookName,volume):
   global isAdmin
   if not isAdmin:
     return redirect(url_for("password"))
-  #db 볼륨 삭제, 볼륨들 땡겨서 순서 맞추기
+  # db 볼륨 삭제, 볼륨들 땡겨서 순서 맞추기
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/delete/<bookName>/<volume>/<line>",methods=["POST"])
