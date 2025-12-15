@@ -49,7 +49,6 @@ def getBookList():
   resultBookList = []
   for book in tempBookList:
      resultBookList.append([book[0],book[1]])
-  print('bookList:',resultBookList)
   return resultBookList
 
 # 해당 도서 마지막권(화) 받아오기
@@ -66,17 +65,16 @@ def getVolumes(bookName):
   resultVolumeList = []
   for volume in tempVolumeList:
      resultVolumeList.append(volume[0])
-  print('volumeList:',resultVolumeList)
   return resultVolumeList
 
 # 해당 도서 해당 권(화) 내용 받아오기
 def getContents(bookName, volume):
   sql = f"SELECT CONTENTS FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME={volume} ORDER BY LINE ASC"
-  lineList = getData(sql=sql)
-  for line in lineList:
-     line = line[0]
-  print('lineList:',lineList)
-  return lineList
+  tempLineList = getData(sql=sql)
+  resultLineList = []
+  for line in tempLineList:
+     resultLineList.append(line[0])
+  return resultLineList
 
 # 관리자 비번 받아오기
 def getAdminPw():
