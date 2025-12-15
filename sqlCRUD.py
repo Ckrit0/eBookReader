@@ -44,11 +44,11 @@ def getData(sql):
 
 # 도서 목록 받아오기
 def getBookList():
-  sql = f"SELECT NAME,AUTHER FROM INFO"
+  sql = f"SELECT NAME FROM INFO"
   tempBookList = getData(sql=sql)
   resultBookList = []
   for book in tempBookList:
-     resultBookList.append([book[0],book[1]])
+     resultBookList.append(book[0])
   return resultBookList
 
 # 해당 도서 마지막권(화) 받아오기
