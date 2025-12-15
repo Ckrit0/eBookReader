@@ -28,24 +28,29 @@ def getCursor():
 def getData(sql):
   data = []
   con, cur = getCursor()
-  if con == None:
-    return None
-  cur.execute(sql)
-  result = cur.fetchall()
-  for row in result:
-    for r in row:
-      data.append(r)
-  con.close()
+  try:
+    cur.execute(sql)
+    result = cur.fetchall()
+    for row in result:
+      for r in row:
+        data.append(r)
+  except Exception as e:
+    print(e)
+  finally:
+    con.close()
   return data
 
 def setData(sql):
+  result = False
   con, cur = getCursor()
-  if con == None:
-    return None
-  cur.execute(sql)
-  result = cur.fetchall()
-  con.commit()
-  con.close()
+  try:
+    cur.execute(sql)
+    result = cur.fetchall()
+    con.commit()
+  except Exception as e:
+    print(e)
+  finally:
+    con.close()
   return result
 
 
@@ -85,6 +90,5 @@ def getAdminPw():
 
 def insertBook(bookName):
   sql = f"INSERT INTO INFO VALUES(IFNULL((SELECT MAX(BID)+1 FROM INFO),0),'{bookName}')"
-  result = setData(sql=sql)
-  print(result)
-  return result
+  setData(sql=sql)
+  return
