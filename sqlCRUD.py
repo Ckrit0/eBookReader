@@ -33,7 +33,10 @@ def getData(sql):
     cur.execute(sql)
     result = cur.fetchall()
     for row in result:
-        data.append(row)
+        tempList = []
+        for r in row:
+           tempList.append(r)
+        data.append(tempList)
     con.close()
     return data
 
@@ -44,41 +47,30 @@ def getData(sql):
 
 # 도서 목록 받아오기
 def getBookList():
-  sql = f"SELECT NAME FROM INFO"
-  tempBookList = getData(sql=sql)
-  resultBookList = []
-  for book in tempBookList:
-     resultBookList.append(book[0])
-  return resultBookList
+  sql = f"SELECT NAME FROM INFO ORDER BY NAME ASC"
+  bookList = getData(sql=sql)
+  return bookList
 
 # 해당 도서 마지막권(화) 받아오기
 def getLastVolume(bookName):
   sql = f"SELECT MAX(VOLUME) FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}')"
   lastVolume = getData(sql)
-  lastVolume = lastVolume[0][0]
-  return lastVolume
+  return lastVolume[0]
 
 # 해당 도서 모든 권(화) 받아오기
 def getVolumes(bookName):
   sql = f"SELECT DISTINCT VOLUME FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}')"
-  tempVolumeList = getData(sql=sql)
-  resultVolumeList = []
-  for volume in tempVolumeList:
-     resultVolumeList.append(volume[0])
-  return resultVolumeList
+  volumeList = getData(sql=sql)
+  return volumeList
 
 # 해당 도서 해당 권(화) 내용 받아오기
 def getContents(bookName, volume):
   sql = f"SELECT CONTENTS FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME={volume} ORDER BY LINE ASC"
-  tempLineList = getData(sql=sql)
-  resultLineList = []
-  for line in tempLineList:
-     resultLineList.append(line[0])
-  return resultLineList
+  lineList = getData(sql=sql)
+  return lineList
 
 # 관리자 비번 받아오기
 def getAdminPw():
   sql = f"SELECT PASSWORD FROM OPTIONS"
   pw = getData(sql=sql)
-  pw = pw[0][0]
-  return pw
+  return pw[0]
