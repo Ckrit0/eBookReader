@@ -44,12 +44,13 @@ def getData(sql):
 
 # 도서 목록 받아오기
 def getBookList():
-  sql = f"SELECT * FROM INFO"
-  bookList = getData(sql=sql)
-  print('bookList:',bookList)
-  for book in bookList:
-     book = book[1]
-  return bookList
+  sql = f"SELECT NAME,AUTHER FROM INFO"
+  tempBookList = getData(sql=sql)
+  resultBookList = []
+  for book in tempBookList:
+     resultBookList.append([book[0],book[1]])
+  print('bookList:',resultBookList)
+  return resultBookList
 
 # 해당 도서 마지막권(화) 받아오기
 def getLastVolume(bookName):
@@ -61,11 +62,12 @@ def getLastVolume(bookName):
 # 해당 도서 모든 권(화) 받아오기
 def getVolumes(bookName):
   sql = f"SELECT DISTINCT VOLUME FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}')"
-  volumeList = getData(sql=sql)
-  for volume in volumeList:
-     volume = volume[0]
-  print('volumeList:',volumeList)
-  return volumeList
+  tempVolumeList = getData(sql=sql)
+  resultVolumeList = []
+  for volume in tempVolumeList:
+     resultVolumeList.append(volume[0])
+  print('volumeList:',resultVolumeList)
+  return resultVolumeList
 
 # 해당 도서 해당 권(화) 내용 받아오기
 def getContents(bookName, volume):
