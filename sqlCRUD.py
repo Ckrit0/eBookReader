@@ -33,12 +33,9 @@ def getData(sql):
     cur.execute(sql)
     result = cur.fetchall()
     for row in result:
-        tempList = []
         for r in row:
-           tempList.append(r)
-        data.append(tempList)
+          data.append(r)
     con.close()
-    print(data)
     return data
 
 
@@ -48,7 +45,7 @@ def getData(sql):
 
 # 도서 목록 받아오기
 def getBookList():
-  sql = f"SELECT NAME, AUTHER FROM INFO ORDER BY NAME ASC"
+  sql = f"SELECT NAME FROM INFO ORDER BY NAME ASC"
   bookList = getData(sql=sql)
   return bookList
 
