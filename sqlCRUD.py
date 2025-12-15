@@ -25,10 +25,8 @@ def getCursor():
         print('Connect Error:',e)
     return con, cur
 
-############## 샘플 ##################
-def getData():
+def getData(sql):
     data = []
-    sql='SELECT * FROM CONTENT'
     con, cur = getCursor()
     if con == None:
         return None
@@ -46,32 +44,31 @@ def getData():
 
 # 도서 목록 받아오기
 def getBookList():
-  tempBooks = []
-  for i in range(10):
-    tempBooks.append('Book' + (str(i+1)))
-  return tempBooks
+  sql = f"SELECT * FROM INFO"
+  bookList = getData(sql=sql)
+  return bookList
 
 # 해당 도서 마지막권(화) 받아오기
 def getLastVolume(bookName):
-  if bookName == '':
-    return 0
+  sql = f"SELECT MAX(VOLUME) FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}')"
+  bookName = getData(sql)
   
   return 15
 
 # 해당 도서 모든 권(화) 받아오기
 def getVolumes(bookName):
-  tempVolume = []
-  for i in range(15):
-    tempVolume.append(i+1)
-  return tempVolume
+  sql = f"SELECT DISTINCT VOLUME FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}')"
+  volumeList = getData(sql=sql)
+  return volumeList
 
 # 해당 도서 해당 권(화) 내용 받아오기
 def getContents(bookName, volume):
-  tmpLines = []
-  for i in range(100):
-    tmpLines.append('line' + (str(i+1)))
-  return tmpLines
+  sql = f"SELECT CONTENTS FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME={volume} ORDER BY LINE ASC"
+  lineList = getData(sql=sql)
+  return lineList
 
 # 관리자 비번 받아오기
 def getAdminPw():
-  return 'test'
+  sql = f"SELECT PASSWORD FROM OPTIONS"
+  pw = getData(sql=sql)
+  return pw
