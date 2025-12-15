@@ -110,7 +110,7 @@ def viewContentsAdmin(bookName, volume):
   except :
     volume = bookQ.getVolume()
   if volume > lastVolume:
-    return redirect(url_for('viewContents',bookName=bookName,volume=volume))
+    return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=lastVolume))
   bookInfo = initBookInfo()
   bookInfo['name'] = bookName
   bookInfo['volume'] = volume
@@ -156,13 +156,13 @@ def modifyContents(bookName, volume):
   contents = contents.rstrip('\n')
   return render_template('insertContents.html',bookList=bookList,bookInfo=bookInfo,bookName=bookName,contents=contents)
 
-############################ 기능 미구현 ########################################
+############################ DB 제어 기능 미구현 ########################################
 @app.route("/insert/<bookName>",methods=["POST"])
 def insertBookName(bookName):
   global isAdmin
   if not isAdmin:
     return redirect(url_for("password"))
-  # DB 해야함
+  # bookName DB INSERT 해야함
   return redirect(url_for("admin"))
 
 @app.route("/insert/<bookName>/<volume>",methods=["POST"])
