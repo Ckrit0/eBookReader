@@ -158,7 +158,6 @@ def modifyContents(bookName, volume):
   contents = contents.rstrip('\n')
   return render_template('insertContents.html',bookList=bookList,bookInfo=bookInfo,bookName=bookName,contents=contents)
 
-############################ DB 제어 기능 미구현 ########################################
 @app.route("/insert/<bookName>",methods=["POST"])
 def insertBookName(bookName):
   global isAdmin
@@ -176,8 +175,10 @@ def insertBookContents(bookName,volume):
   keyList = list(request.form.keys())
   keyList.sort()
   for i in keyList:
-    contentList.append(request.form[i])
-  # contentList DB INSERT 해야함. (DB에 해당 volume 기존 내용 있으면 기존 내용 지워야 함)
+    line = request.form[i].strip()
+    if line != '':
+      contentList.append(request.form[i])
+  db.insertVolume(bookName=bookName,volume=volume,contentList=contentList)
   return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=volume))
 
 @app.route("/update/<bookName>",methods=["POST"])
@@ -185,7 +186,8 @@ def updateBookName(bookName):
   global isAdmin
   if not isAdmin:
     return redirect(url_for("password"))
-  # DB UPDATE 해야함
+  newName = request.form['data']
+  db.updateBook(bookName=bookName,newName=newName)
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/update/<bookName>/<volume>",methods=["POST"])
@@ -194,7 +196,7 @@ def updateBookVolume(bookName,volume):
   if not isAdmin:
     return redirect(url_for("password"))
   newVolume = request.form['data']
-  # DB UPDATE 해야함
+  db.updateVolume(bookName=bookName,volume=volume,newVolume=newVolume)
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/update/<bookName>/<volume>/<line>/<redLine>",methods=["POST"])
@@ -203,7 +205,7 @@ def updateBookContent(bookName,volume,line,redLine):
   if not isAdmin:
     return redirect(url_for("password"))
   content = request.form['data']
-# db에 content로 line update 해야함.
+  db.updateContent(bookName=bookName,volume=volume,line=line,content=content)
   return redirect(url_for('viewContentsForLineAdmin',bookName=bookName,volume=volume,line=redLine))
 
 @app.route("/delete/<bookName>",methods=["POST"])
@@ -211,7 +213,7 @@ def deleteBookName(bookName):
   global isAdmin
   if not isAdmin:
     return redirect(url_for("password"))
-  # DB DELETE 해야함
+  db.deleteBook(bookName=bookName)
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/delete/<bookName>/<volume>",methods=["POST"])
@@ -219,7 +221,7 @@ def deleteBookVolume(bookName,volume):
   global isAdmin
   if not isAdmin:
     return redirect(url_for("password"))
-  # db 볼륨 삭제, 볼륨들 땡겨서 순서 맞추기
+  db.deleteVolume(bookName=bookName,volume=volume)
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/delete/<bookName>/<volume>/<line>",methods=["POST"])
@@ -227,13 +229,8 @@ def deleteBookContent(bookName,volume,line):
   global isAdmin
   if not isAdmin:
     return redirect(url_for("password"))
-# db에 line delete해야함. (근데 이거 그럼 라인 정렬 다시 해야하는건데..)
+  db.deleteContent(bookName=bookName,volume=volume,line=line)
   return redirect(url_for('viewContentsForLineAdmin',bookName=bookName,volume=volume,line=line))
-
-
-
-
-  
 
 if __name__ == '__main__':
   app.run(
