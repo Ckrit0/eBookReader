@@ -95,27 +95,27 @@ def insertBook(bookName):
 
 # 도서명 변경하기
 def updateBook(bookName,newName):
-  sql = f"UPDATE INFO SET NAME={newName} WHERE NAME={bookName}"
+  sql = f"UPDATE INFO SET NAME='{newName}' WHERE NAME='{bookName}'"
   setData(sql=sql)
 
 # 도서 삭제하기
 def deleteBook(bookName):
   # 내용 삭제
-  sql = f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME={bookName})"
+  sql = f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}')"
   setData(sql=sql)
   # 도서정보 삭제
-  sql = f"DELETE FROM INFO WHERE NAME={bookName}"
+  sql = f"DELETE FROM INFO WHERE NAME='{bookName}'"
   setData(sql=sql)
 
 # 볼륨 컨텐츠 추가하기(수정하기)
 def insertVolume(bookName,volume,contentList):
   # 기존 내용 삭제
-  sql = f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME={bookName}) AND VOLUME = {volume}"
+  sql = f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}"
   setData(sql=sql)
   # 새로운 내용 추가
   sql = f"INSERT INTO CONTENT VALUES("
   for i in range(len(contentList)):
-    sql = sql + f"((SELECT BID FROM INFO WHERE NAME={bookName}),{volume},{i+1},{contentList[i]})"
+    sql = sql + f"((SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{i+1},'{contentList[i]}')"
     if i < len(contentList)-1:
       sql = sql + f", "
   sql = sql + ")"
@@ -123,23 +123,23 @@ def insertVolume(bookName,volume,contentList):
 
 # 볼륨 수정하기
 def updateVolume(bookName,volume,newVolume):
-  sql = f"UPDATE CONTENT SET VOLUME = {newVolume} WHERE BID = (SELECT BID FROM INFO WHERE NAME={bookName}) AND VOLUME = {volume}"
+  sql = f"UPDATE CONTENT SET VOLUME = {newVolume} WHERE BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}"
   setData(sql=sql)
 
 # 볼륨 삭제하기
 def deleteVolume(bookName,volume):
-  sql = f"DELETE CONTENT WHERE BID = (SELECT BID FROM INFO WHERE NAME={bookName}) AND VOLUME = {volume}"
+  sql = f"DELETE CONTENT WHERE BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}"
   setData(sql=sql)
 
 # 라인 수정하기
 def updateContent(bookName,volume,line,content):
-  sql = f"UPDATE CONTENT SET CONTENT = {content} WHERE BID = (SELECT BID FROM INFO WHERE NAME={bookName}) AND VOLUME = {volume} AND LINE = {line}"
+  sql = f"UPDATE CONTENT SET CONTENT = '{content}' WHERE BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume} AND LINE = {line}"
   setData(sql=sql)
 
 # 라인 삭제하기
 def deleteContent(bookName,volume,line):
-  sql = f"DELETE CONTENT WHERE  BID = (SELECT BID FROM INFO WHERE NAME={bookName}) AND VOLUME = {volume} AND LINE = {line}"
+  sql = f"DELETE CONTENT WHERE  BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume} AND LINE = {line}"
   setData(sql=sql)
   # 이후 라인 땡기기
-  sql = f"UPDATE CONTENT SET LINE = ((SELECT LINE FROM CONTENT WHERE BID = (SELECT BID FROM INFO WHERE NAME={bookName}) AND VOLUME = {volume} AND LINE = {line}) - 1) WHERE BID = (SELECT BID FROM INFO WHERE NAME={bookName}) AND VOLUME = {volume} AND LINE > {line}"
+  sql = f"UPDATE CONTENT SET LINE = ((SELECT LINE FROM CONTENT WHERE BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume} AND LINE = {line}) - 1) WHERE BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume} AND LINE > {line}"
   setData()
