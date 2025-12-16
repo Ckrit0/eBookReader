@@ -113,9 +113,9 @@ def insertVolume(bookName,volume,contentList):
   sql = f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}"
   setData(sql=sql)
   # 새로운 내용 추가
-  sql = f"INSERT INTO CONTENT VALUES("
+  sql = f"INSERT INTO CONTENT VALUES "
   for i in range(len(contentList)):
-    sql = sql + f"(SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{i+1},'{contentList[i]}')"
+    sql = sql + f"((SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{i+1},'{contentList[i]}')"
     if i < len(contentList)-1:
       sql = sql + f", "
   setData(sql=sql)
