@@ -4,6 +4,13 @@ from flask import Flask, render_template, request, redirect, url_for
 import sqlCRUD as db
 import bookQueue
 
+# 수정 후 데이터 초기화
+def initData():
+  global bookInfo, bookList, bookQ
+  bookInfo = initBookInfo()
+  bookList = db.getBookList()
+  bookQ = bookQueue.BookQueue()
+
 # bookInfo 초기화
 def initBookInfo():
   bookInfo = {
@@ -139,6 +146,7 @@ def insertContents(bookName):
   bookInfo = initBookInfo()
   bookInfo['name'] = bookName
   bookInfo['lastVolume'] = db.getLastVolume(bookName=bookName)
+  initData()
   return render_template('insertContents.html', bookList=bookList, bookInfo=bookInfo, bookName=bookName)
 
 # /insert/도서명/권(화)
@@ -163,7 +171,8 @@ def insertBookName(bookName):
   global isAdmin
   if not isAdmin:
     return redirect(url_for("password"))
-  db.insertBook(bookName=bookName) # 즉시 반영 안됨 확인필요
+  db.insertBook(bookName=bookName)
+  initData()
   return redirect(url_for("admin"))
 
 @app.route("/insert/<bookName>/<volume>",methods=["POST"])
@@ -179,6 +188,7 @@ def insertBookContents(bookName,volume):
     if line != '':
       contentList.append(request.form[i])
   db.insertVolume(bookName=bookName,volume=volume,contentList=contentList)
+  initData()
   return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=volume))
 
 @app.route("/update/<bookName>",methods=["POST"])
@@ -188,6 +198,7 @@ def updateBookName(bookName):
     return redirect(url_for("password"))
   newName = request.form['data']
   db.updateBook(bookName=bookName,newName=newName)
+  initData()
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/update/<bookName>/<volume>",methods=["POST"])
@@ -197,6 +208,7 @@ def updateBookVolume(bookName,volume):
     return redirect(url_for("password"))
   newVolume = request.form['data']
   db.updateVolume(bookName=bookName,volume=volume,newVolume=newVolume)
+  initData()
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/update/<bookName>/<volume>/<line>/<redLine>",methods=["POST"])
@@ -206,6 +218,7 @@ def updateBookContent(bookName,volume,line,redLine):
     return redirect(url_for("password"))
   content = request.form['data']
   db.updateContent(bookName=bookName,volume=volume,line=line,content=content)
+  initData()
   return redirect(url_for('viewContentsForLineAdmin',bookName=bookName,volume=volume,line=redLine))
 
 @app.route("/delete/<bookName>",methods=["POST"])
@@ -214,6 +227,7 @@ def deleteBookName(bookName):
   if not isAdmin:
     return redirect(url_for("password"))
   db.deleteBook(bookName=bookName)
+  initData()
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/delete/<bookName>/<volume>",methods=["POST"])
@@ -222,6 +236,7 @@ def deleteBookVolume(bookName,volume):
   if not isAdmin:
     return redirect(url_for("password"))
   db.deleteVolume(bookName=bookName,volume=volume)
+  initData()
   return redirect(url_for('selectVolumeAdmin',bookName=bookName))
 
 @app.route("/delete/<bookName>/<volume>/<line>",methods=["POST"])
@@ -230,6 +245,7 @@ def deleteBookContent(bookName,volume,line):
   if not isAdmin:
     return redirect(url_for("password"))
   db.deleteContent(bookName=bookName,volume=volume,line=line)
+  initData()
   return redirect(url_for('viewContentsForLineAdmin',bookName=bookName,volume=volume,line=line))
 
 if __name__ == '__main__':
