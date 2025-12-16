@@ -123,7 +123,6 @@ def insertVolume(bookName,volume,contentList):
 # 볼륨 수정하기
 def updateVolume(bookName,volume,newVolume):
   sql = f"UPDATE CONTENT SET VOLUME = {newVolume} WHERE BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}"
-  print(sql)
   setData(sql=sql)
 
 # 볼륨 삭제하기
