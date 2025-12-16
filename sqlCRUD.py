@@ -115,11 +115,9 @@ def insertVolume(bookName,volume,contentList):
   # 새로운 내용 추가
   sql = f"INSERT INTO CONTENT VALUES("
   for i in range(len(contentList)):
-    sql = sql + f"((SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{i+1},'{contentList[i]}')"
+    sql = sql + f"(SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{i+1},'{contentList[i]}')"
     if i < len(contentList)-1:
       sql = sql + f", "
-  sql = sql + ")"
-  print(sql)
   setData(sql=sql)
 
 # 볼륨 수정하기
