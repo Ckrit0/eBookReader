@@ -156,7 +156,7 @@ function updateTarget(type, lineId){
     if(type == "book"){
         targetURL = "/update/" + lineId
     }else if(type == "vol"){
-        targetURL = "/update/" + bookInfo['name'] + "/" + bookInfo['volume']
+        targetURL = "/update/" + bookInfo['name'] + "/" + lineId
     }else if(type == "line"){
         let redirectionLine = document.getElementById('headLine').value
         targetURL = "/update/" + bookInfo['name'] + "/" + bookInfo['volume'] + "/" + lineId + "/" + redirectionLine
