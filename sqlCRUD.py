@@ -112,7 +112,6 @@ def insertVolume(bookName,volume,contentList):
   # 기존 내용 삭제
   sql = f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}"
   setData(sql=sql)
-  print("삭제 완료")
   # 새로운 내용 추가
   sql = f"INSERT INTO CONTENT VALUES("
   for i in range(len(contentList)):
@@ -120,6 +119,7 @@ def insertVolume(bookName,volume,contentList):
     if i < len(contentList)-1:
       sql = sql + f", "
   sql = sql + ")"
+  print(sql)
   setData(sql=sql)
 
 # 볼륨 수정하기
