@@ -63,9 +63,10 @@ class volumeForInsert:
     
     def setContents(self, contentDict):
         for key in contentDict.keys():
-            if key == 'chunkIndex':
-                self.contents[key].append(contentDict[key])
-            self.contents[key] = contentDict[key]
+            if key == "chunkIndex":
+                self.contents["chunkIndex"].append(contentDict[key])
+            else :
+                self.contents[key] = contentDict[key]
         return self.checkSetContents()
     
     def getContents(self):
