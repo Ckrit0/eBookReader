@@ -90,11 +90,26 @@ function insertContents(){
     while(contents.indexOf('  ') >= 0){
         contents = contents.replaceAll('  ',' ')
     }
-    let contentList = contents.split('\n')
+    let contentList = []
+    let tempContentList = contents.split('\n')
+    for(var content in tempContentList){
+        if(content.length <= 1000){
+            contentList.push(content)
+        }else{
+            for(var len=0;len<content.length;len=+1000){
+                contentList.push(content.slice(len,len+1000))
+            }
+        }
+    }
     let data = {}
     for(var i=0;i<contentList.length;i++){
         data[i] = contentList[i]
+        if(i%100==0){
+            postAPI(url=targetURL,data=data)
+            data={}
+        }
     }
+    data['end'] = ""
     postAPI(url=targetURL,data=data)
 }
 
