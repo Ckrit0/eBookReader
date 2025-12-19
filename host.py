@@ -178,28 +178,19 @@ def insertBookName(bookName):
 @app.route("/insert/<bookName>/<volume>",methods=["POST"])
 def insertBookContents(bookName,volume):
   global isAdmin
-  isLast = False
   if not isAdmin:
     return redirect(url_for("password"))
-  contentList = []
-  keyList = list(request.form.keys())
-  keyList.sort()
-  print(keyList[0])
-  for i in keyList:
-    if i == 'end':
-      isLast = True
-      continue
-    line = request.form[i].strip()
-    if line != '':
-      contentList.append(request.form[i])
-  
-  if isLast :
-    db.insertVolume(bookName=bookName,volume=volume,contentList=bookQ.getContents())
+  contentDict = {}
+  for key in request.form.keys():
+    contentDict[key] = request.form[key]
+  result, contents = bookQ.setContents(contentDict=contentDict)
+  if result >= 100:
+    db.insertVolume(bookName=bookName, volume=volume, contents=contents)
     initData()
     return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=volume))
-  else:
-    bookQ.setContents(contentList=contentList)
-    return "nowUploading"
+  else :
+    return "<h1>업로드" + result + "% 진행중.</h1>"
+  
 
   
 
