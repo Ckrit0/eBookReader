@@ -107,7 +107,7 @@ async function insertContents(){
     let chunkSize = 100
     let totalChunk = Math.ceil(contentList.length/chunkSize)
     for(let chunkIndex=0;chunkIndex<totalChunk;chunkIndex++){
-        let data = {}
+        let data = new FormData()
         for(var i=chunkIndex*chunkSize;i<(chunkIndex*chunkSize+chunkSize);i++){
             if(i < contentList.length){
                 data.append(i,contentList[i])
