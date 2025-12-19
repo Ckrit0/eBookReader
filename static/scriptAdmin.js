@@ -91,13 +91,13 @@ async function insertContents(){
     }
     let contentList = []
     let tempContentList = contents.split('\n')
-    for(var content in tempContentList){
+    for(var i in tempContentList){
         // 한 줄의 길이가 1000글자(DB에 셋팅된 용량)를 넘기면 다음줄로 넘김
-        if(content.length <= 1000){
-            contentList.push(content)
+        if(tempContentList[i].length <= 1000){
+            contentList.push(tempContentList[i])
         }else{
-            for(var len=0;len<content.length;len=+1000){
-                contentList.push(content.slice(len,len+1000))
+            for(var len=0;len<tempContentList[i].length;len=+1000){
+                contentList.push(tempContentList[i].slice(len,len+1000))
             }
         }
     }
