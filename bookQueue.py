@@ -49,13 +49,14 @@ class BookQueue:
 class volumeForInsert:
     def __init__(self, id):
         self.id = id
-        self.chunkIndex = []
-        self.contents = {}
+        self.contents = {
+            "chunkIndex" : []
+        }
     
     def getId(self):
         return self.id
     
-    def checkSetContents(self, contentDict):
+    def checkSetContents(self):
         chunkList = self.contents['chunkIndex']
         totalChunk = self.contents['totalChunk']
         return math.floor(len(chunkList) * 100) / totalChunk
@@ -65,7 +66,7 @@ class volumeForInsert:
             if key == 'chunkIndex':
                 self.contents[key].append(contentDict[key])
             self.contents[key] = contentDict[key]
-        return self.checkSetContents(contentDict)
+        return self.checkSetContents()
     
     def getContents(self):
         temp = self.contents.copy()
