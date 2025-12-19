@@ -3,6 +3,7 @@ class BookQueue:
         self.name = ''
         self.volume = 0
         self.queue = 1
+        self.contents = []
 
     def setVolume(self, volume):
         self.volume = volume
@@ -26,3 +27,10 @@ class BookQueue:
         self.queue = 1
         return temp
 
+    def setContents(self, contentList):
+        self.contents = self.contents + contentList
+    
+    def getContents(self):
+        temp = list(self.contents) # deep copy
+        self.contents = []
+        return temp
