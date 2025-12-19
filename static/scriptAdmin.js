@@ -71,7 +71,7 @@ function modifyVolume(){
 /**
  * 글 작성 DB 적용
  */
-function insertContents(){
+async function insertContents(){
     let targetVolume = ''
     let targetTag = document.getElementById("insVolume")
     if(targetTag.tagName == 'INPUT'){
@@ -82,7 +82,6 @@ function insertContents(){
     if(bookInfo['lastVolume'] <= targetVolume && !confirm(targetVolume + "권(화)의 내용을 업데이트 하시겠습니까?")){
         return
     }
-    let targetURL = '/insert/' + bookInfo['name'] + '/' + targetVolume
     let contents = document.getElementById("contentsArea").value
     while(contents.indexOf('\n\n') >= 0){
         contents = contents.replaceAll('\n\n','\n')
@@ -93,6 +92,7 @@ function insertContents(){
     let contentList = []
     let tempContentList = contents.split('\n')
     for(var content in tempContentList){
+        // 한 줄의 길이가 1000글자(DB에 셋팅된 용량)를 넘기면 다음줄로 넘김
         if(content.length <= 1000){
             contentList.push(content)
         }else{
@@ -101,16 +101,26 @@ function insertContents(){
             }
         }
     }
-    let data = {}
-    for(var i=0;i<contentList.length;i++){
-        data[i] = contentList[i]
-        if(i%100==0){
-            postAPI(url=targetURL,data=data)
-            data={}
+    // 내용이 너무 길지 않도록 나눠서 업로드
+    let targetURL = '/insert/' + bookInfo['name'] + '/' + targetVolume
+    let bookId = bookInfo['name'] + '-' + targetVolume
+    let chunkSize = 100
+    let totalChunk = Math.ceil(contentList.length/chunkSize)
+    for(let chunkIndex=0;chunkIndex<totalChunk;chunkIndex++){
+        let data = {}
+        for(var i=chunkIndex*chunkSize;i<(chunkIndex*chunkSize+chunkSize);i++){
+            if(i < contentList.length){
+                data.append(i,contentList[i])
+            }
         }
+        data.append('bookId', bookId)
+        data.append('totalChunk', totalChunk)
+        data.append('chunkIndex', chunkIndex)
+        await fetch(targetURL,{
+            method : 'POST',
+            body : data
+        })
     }
-    data['end'] = ""
-    postAPI(url=targetURL,data=data)
 }
 
 
