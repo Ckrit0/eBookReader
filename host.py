@@ -1,258 +1,156 @@
-# 관리자모드 세션방식으로 바꿔야 함
+import pymysql
 
-from flask import Flask, render_template, request, redirect, url_for
-import sqlCRUD as db
-import bookQueue
+dbInfo = {
+  'host' : 'localhost',
+  'port' : 3306,
+  'user' : 'ckrit',
+  'password' : 'P@ssw0rd',
+  'database' : 'E_BOOK_READER'
+}
 
-# 수정 후 데이터 초기화
-def initData():
-  global bookInfo, bookList, bookQ
-  bookInfo = initBookInfo()
-  bookList = db.getBookList()
-  bookQ = bookQueue.BookQueue()
+def getCursor():
+  global dbInfo
+  con = None
+  cur = None
+  try:
+    con = pymysql.connect(
+      host=dbInfo['host'],
+      port=dbInfo['port'],
+      user=dbInfo['user'],
+      password=dbInfo['password'],
+      database=dbInfo['database']
+    )
+    cur = con.cursor()
+  except Exception as e:
+      print('Connect Error:',e)
+  return con, cur
 
-# bookInfo 초기화
-def initBookInfo():
-  bookInfo = {
-    'name' : '',
-    'volume' : 0,
-    'line' : bookQ.getLine(),
-    'lastVolume' : db.getLastVolume(''),
-  }
-  return bookInfo
+def getData(sql):
+  data = []
+  con, cur = getCursor()
+  try:
+    cur.execute(sql)
+    result = cur.fetchall()
+    for row in result:
+      for r in row:
+        data.append(r)
+  except Exception as e:
+    print(e)
+  finally:
+    con.close()
+  return data
 
-bookQ = bookQueue.BookQueue()
-bookInfo = initBookInfo()
-bookList = db.getBookList()
-isAdmin = False
+def setData(sql):
+  result = False
+  con, cur = getCursor()
+  try:
+    cur.execute(sql)
+    result = cur.fetchall()
+    con.commit()
+  except Exception as e:
+    print(e)
+  finally:
+    con.close()
+  return result
 
+def setDatas(sqlList):
+  result = False
+  con, cur = getCursor()
+  try:
+    for sql in sqlList:
+      cur.execute(sql)
+    result = cur.fetchall()
+    con.commit()
+  except Exception as e:
+    print(e)
+  finally:
+    con.close()
+  return result
 
-#######################
-## Flask 웹 서버 부분 ##
-#######################
+# 관리자 비번 받아오기
+def getAdminPw():
+  sql = f"SELECT PASSWORD FROM OPTIONS"
+  pw = getData(sql=sql)[0]
+  return pw
 
-app = Flask(__name__)
+# 도서 목록 받아오기
+def getBookList():
+  sql = f"SELECT NAME FROM INFO ORDER BY NAME ASC"
+  bookList = getData(sql=sql)
+  return bookList
 
-# /
-@app.route("/")
-def main():
-  return  render_template('index.html', bookList=bookList)
+# 해당 도서 마지막권(화) 받아오기
+def getLastVolume(bookName):
+  sql = f"SELECT IFNULL((SELECT MAX(VOLUME) FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}')),0)"
+  lastVolume = getData(sql)[0]
+  return lastVolume
 
-# /도서명
-@app.route("/read/<bookName>")
-def selectVolume(bookName):
-  bookInfo = initBookInfo()
-  bookInfo['name'] = bookName
-  bookInfo['lastVolume'] = db.getLastVolume(bookName=bookName)
-  volumes = db.getVolumes(bookName=bookName)
-  return render_template('selectVolume.html', bookList=bookList, bookInfo=bookInfo, volumes=volumes)
+# 해당 도서 모든 권(화) 받아오기
+def getVolumes(bookName):
+  sql = f"SELECT DISTINCT VOLUME FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') ORDER BY VOLUME"
+  volumeList = getData(sql=sql)
+  return volumeList
 
-# /도서명/권(화)
-@app.route("/read/<bookName>/<volume>")
-def viewContents(bookName, volume):
-  lastVolume = db.getLastVolume(bookName=bookName)
-  try :
-    volume = int(volume)
-  except :
-    volume = bookQ.getVolume()
-  if volume > lastVolume:
-    return redirect(url_for('viewContents',bookName=bookName,volume=lastVolume))
-  elif volume < 1:
-    return redirect(url_for('viewContents',bookName=bookName,volume=1))
-  bookInfo = initBookInfo()
-  bookInfo['name'] = bookName
-  bookInfo['volume'] = volume
-  bookInfo['lastVolume'] = lastVolume
-  contents = db.getContents(bookName=bookName,volume=volume)
-  return render_template('contents.html', bookList=bookList, bookInfo=bookInfo, contents=contents)
+# 해당 도서 해당 권(화) 내용 받아오기
+def getContents(bookName, volume):
+  sql = f"SELECT CONTENTS FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME={volume} ORDER BY LINE ASC"
+  lineList = getData(sql=sql)
+  return lineList
 
-# /도서명/권(화)/줄
-@app.route("/read/<bookName>/<volume>/<line>")
-def viewContentsForLine(bookName, volume, line):
-  bookQ.setLine(line=line)
-  bookQ.setVolume(volume=int(volume))
-  return redirect(url_for('viewContents',bookName=bookName, volume=volume))
+# 도서 추가하기
+def insertBook(bookName):
+  sql = f"INSERT INTO INFO VALUES((SELECT IFNULL((SELECT MAX(BID)+1 FROM INFO),0)),'{bookName}')"
+  setData(sql=sql)
 
+# 도서명 변경하기
+def updateBook(bookName,newName):
+  sql = f"UPDATE INFO SET NAME='{newName}' WHERE NAME='{bookName}'"
+  setData(sql=sql)
 
-# /admin GET
-@app.route("/admin",methods=["GET"])
-def password():
-    global isAdmin
-    if isAdmin:
-      return render_template('indexAdmin.html', bookList=bookList)
-    else:
-      return render_template('password.html')
+# 도서 삭제하기
+def deleteBook(bookName):
+  # 내용 삭제
+  sql = f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}')"
+  setData(sql=sql)
+  # 도서정보 삭제
+  sql = f"DELETE FROM INFO WHERE NAME='{bookName}'"
+  setData(sql=sql)
 
-# /admin POST
-@app.route("/admin",methods=["POST"])
-def admin():
-    global isAdmin
-    if isAdmin:
-      return render_template('admin.html', bookList=bookList)
-    elif request.form['password'] == db.getAdminPw():
-      isAdmin = True
-      return render_template('indexAdmin.html', bookList=bookList)
-    else:
-      return render_template('password.html')
+# 볼륨 컨텐츠 추가하기(수정하기)
+def insertVolume(bookName,volume,contents):
+  # 기존 내용 삭제
+  sqlList = []
+  sqlList.append(f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}")
+  # 새로운 내용 추가
+  contentList = []
+  keyList = contents.keys()
+  keyList.sort()
+  sql = f"INSERT INTO CONTENT VALUES "
+  for i in keyList:
+    sql = sql + f"((SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{i+1},'{contents[i]}')"
+    if i < len(contentList)-1:
+      sql = sql + f", "
+  setDatas(sqlList=sqlList)
 
-# /admin/도서명
-@app.route("/admin/<bookName>")
-def selectVolumeAdmin(bookName):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  bookInfo = initBookInfo()
-  bookInfo['name'] = bookName
-  bookInfo['lastVolume'] = db.getLastVolume(bookName=bookName)
-  volumes = db.getVolumes(bookName=bookName)
-  return render_template('selectVolumeAdmin.html', bookList=bookList, bookInfo=bookInfo, volumes=volumes)
+# 볼륨 수정하기
+def updateVolume(bookName,volume,newVolume):
+  sql = f"UPDATE CONTENT SET VOLUME = {newVolume} WHERE BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}"
+  setData(sql=sql)
 
-# /admin/도서명/권(화)
-@app.route("/admin/<bookName>/<volume>")
-def viewContentsAdmin(bookName, volume):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  lastVolume = db.getLastVolume(bookName=bookName)
-  try :
-    volume = int(volume)
-  except :
-    volume = bookQ.getVolume()
-  if volume > lastVolume:
-    return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=lastVolume))
-  bookInfo = initBookInfo()
-  bookInfo['name'] = bookName
-  bookInfo['volume'] = volume
-  bookInfo['lastVolume'] = lastVolume
-  contents = db.getContents(bookName=bookName,volume=volume)
-  return render_template('contentsAdmin.html', bookList=bookList, bookInfo=bookInfo, contents = contents)
+# 볼륨 삭제하기
+def deleteVolume(bookName,volume):
+  sql = f"DELETE CONTENT WHERE BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}"
+  setData(sql=sql)
 
-# /admin/도서명/권(화)/줄
-@app.route("/admin/<bookName>/<volume>/<line>")
-def viewContentsForLineAdmin(bookName, volume, line):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  bookQ.setLine(line=line)
-  bookQ.setVolume(volume=int(volume))
-  return redirect(url_for('viewContentsAdmin',bookName=bookName, volume=volume))
+# 라인 수정하기
+def updateContent(bookName,volume,line,content):
+  sql = f"UPDATE CONTENT SET CONTENTS = '{content}' WHERE BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume} AND LINE = {line}"
+  setData(sql=sql)
 
-# /insert/도서명
-@app.route("/insert/<bookName>", methods=['GET'])
-def insertContents(bookName):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  bookInfo = initBookInfo()
-  bookInfo['name'] = bookName
-  bookInfo['lastVolume'] = db.getLastVolume(bookName=bookName)
-  initData()
-  return render_template('insertContents.html', bookList=bookList, bookInfo=bookInfo, bookName=bookName)
-
-# /insert/도서명/권(화)
-@app.route("/insert/<bookName>/<volume>")
-def modifyContents(bookName, volume):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  bookInfo = initBookInfo()
-  bookInfo['name'] = bookName
-  bookInfo['volume'] = volume
-  bookInfo['lastVolume'] = db.getLastVolume(bookName=bookName)
-  contents = ""
-  tempContents = db.getContents(bookName=bookName,volume=volume)
-  for content in tempContents:
-    contents = contents + content + "\n"
-  contents = contents.rstrip('\n')
-  return render_template('insertContents.html',bookList=bookList,bookInfo=bookInfo,bookName=bookName,contents=contents)
-
-@app.route("/insert/<bookName>",methods=["POST"])
-def insertBookName(bookName):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  db.insertBook(bookName=bookName)
-  initData()
-  return redirect(url_for("admin"))
-
-@app.route("/insert/<bookName>/<volume>",methods=["POST"])
-def insertBookContents(bookName,volume):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  contentDict = {}
-  for key in request.form.keys():
-    contentDict[key] = request.form[key]
-  result, contents = bookQ.setContents(contentDict=contentDict)
-  if result >= 100:
-    db.insertVolume(bookName=bookName, volume=volume, contents=contents)
-    initData()
-    return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=volume))
-  else :
-    return "<h1>업로드" + result + "% 진행중.</h1>"
-  
-
-  
-
-@app.route("/update/<bookName>",methods=["POST"])
-def updateBookName(bookName):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  newName = request.form['data']
-  db.updateBook(bookName=bookName,newName=newName)
-  initData()
-  return redirect(url_for('selectVolumeAdmin',bookName=bookName))
-
-@app.route("/update/<bookName>/<volume>",methods=["POST"])
-def updateBookVolume(bookName,volume):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  newVolume = request.form['data']
-  db.updateVolume(bookName=bookName,volume=volume,newVolume=newVolume)
-  initData()
-  return redirect(url_for('selectVolumeAdmin',bookName=bookName))
-
-@app.route("/update/<bookName>/<volume>/<line>/<redLine>",methods=["POST"])
-def updateBookContent(bookName,volume,line,redLine):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  content = request.form['data']
-  db.updateContent(bookName=bookName,volume=volume,line=line,content=content)
-  initData()
-  return redirect(url_for('viewContentsForLineAdmin',bookName=bookName,volume=volume,line=redLine))
-
-@app.route("/delete/<bookName>",methods=["POST"])
-def deleteBookName(bookName):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  db.deleteBook(bookName=bookName)
-  initData()
-  return redirect(url_for('selectVolumeAdmin',bookName=bookName))
-
-@app.route("/delete/<bookName>/<volume>",methods=["POST"])
-def deleteBookVolume(bookName,volume):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  db.deleteVolume(bookName=bookName,volume=volume)
-  initData()
-  return redirect(url_for('selectVolumeAdmin',bookName=bookName))
-
-@app.route("/delete/<bookName>/<volume>/<line>",methods=["POST"])
-def deleteBookContent(bookName,volume,line):
-  global isAdmin
-  if not isAdmin:
-    return redirect(url_for("password"))
-  db.deleteContent(bookName=bookName,volume=volume,line=line)
-  initData()
-  return redirect(url_for('viewContentsForLineAdmin',bookName=bookName,volume=volume,line=line))
-
-if __name__ == '__main__':
-  app.run(
-    debug=True,
-    host='0.0.0.0'
-  )
+# 라인 삭제하기
+def deleteContent(bookName,volume,line):
+  sql = f"DELETE CONTENT WHERE  BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume} AND LINE = {line}"
+  setData(sql=sql)
+  # 이후 라인 땡기기
+  sql = f"UPDATE CONTENT SET LINE = ((SELECT LINE FROM CONTENT WHERE BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume} AND LINE = {line}) - 1) WHERE BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume} AND LINE > {line}"
+  setData()
