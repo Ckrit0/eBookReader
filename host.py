@@ -190,10 +190,8 @@ def insertBookContents(bookName,volume):
     initData()
     return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=volume))
   else :
-    return "<h1>업로드" + str(result) + "% 진행중.</h1>"
-  
+    return str(result) + "%"
 
-  
 
 @app.route("/update/<bookName>",methods=["POST"])
 def updateBookName(bookName):
