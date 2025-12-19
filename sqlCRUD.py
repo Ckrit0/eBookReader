@@ -130,6 +130,7 @@ def insertVolume(bookName,volume,contents):
     sql = sql + f"((SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{i+1},'{contents[str(i)]}')"
     if i < len(contentList)-1:
       sql = sql + f", "
+  sqlList.append(sql)
   setDatas(sqlList=sqlList)
 
 # 볼륨 수정하기
