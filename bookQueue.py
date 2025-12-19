@@ -1,9 +1,10 @@
+import math
 class BookQueue:
     def __init__(self):
         self.name = ''
         self.volume = 0
         self.queue = 1
-        self.contents = []
+        self.volumeList = []
 
     def setVolume(self, volume):
         self.volume = volume
@@ -27,10 +28,47 @@ class BookQueue:
         self.queue = 1
         return temp
 
-    def setContents(self, contentList):
-        self.contents = self.contents + contentList
+    def getVolumeByBookId(self, bookId):
+        for volume in self.volumeList:
+            if volume.getId() == bookId:
+                return volume
+        volume = volumeForInsert(bookId)
+        self.volumeList.append(volume)
+        return volume
+
+    def setContents(self, contentDict):
+        volume = self.getVolumeByBookId(contentDict['bookId'])
+        return volume.setContents(contentDict=contentDict), volume
+            
+    def getContents(self, bookId):
+        for i in range(len(self.volumeList)):
+            if self.volumeList[i].getId() == bookId:
+                return self.volumeList.pop(i).getContents()
+    
+    
+class volumeForInsert:
+    def __init__(self, id):
+        self.id = id
+        self.chunkIndex = []
+    
+    def getId(self):
+        return self.id
+    
+    def checkSetContents(self, contentDict):
+        chunkList = self.contents['chunkIndex']
+        totalChunk = self.contents['totalChunk']
+        return math.floor(len(chunkList) * 100) / totalChunk
+    
+    def setContents(self, contentDict):
+        for key in contentDict.keys():
+            if key == 'chunkIndex':
+                self.contents[key].append(contentDict[key])
+            self.contents[key] = contentDict[key]
+        return self.checkSetContents(contentDict)
     
     def getContents(self):
-        temp = list(self.contents) # deep copy
-        self.contents = []
+        temp = self.contents.copy()
+        self.contents = {}
         return temp
+    
+    
