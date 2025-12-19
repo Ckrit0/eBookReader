@@ -119,7 +119,13 @@ async function insertContents(){
         await fetch(targetURL,{
             method : 'POST',
             body : data
-        })
+        }).then(
+            ()=>{
+                if(i+1 == (chunkIndex*chunkSize+chunkSize)){
+                    window.location.href = '/admin/' + bookInfo['name']
+                }
+            }
+        )
     }
 }
 
