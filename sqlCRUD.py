@@ -124,12 +124,9 @@ def insertVolume(bookName,volume,contents):
   sqlList.append(f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}")
   # 새로운 내용 추가
   contentList = []
-  print(contents)
-  print(type(contents))
   keyList = contents.keys()
-  keyList.sort()
   sql = f"INSERT INTO CONTENT VALUES "
-  for i in keyList:
+  for i in range(len(keyList)):
     sql = sql + f"((SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{i+1},'{contents[i]}')"
     if i < len(contentList)-1:
       sql = sql + f", "
