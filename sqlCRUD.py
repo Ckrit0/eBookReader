@@ -122,9 +122,6 @@ def insertVolume(bookName,volume,contents):
   sqlList = []
   sqlList.append(f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}")
   # 새로운 내용 추가
-  contents.pop('bookId')
-  contents.pop('totalChunk')
-  contents.pop('chunkIndex')
   contentList = []
   keyList = contents.keys()
   keyList.sort()
