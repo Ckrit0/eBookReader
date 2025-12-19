@@ -178,18 +178,28 @@ def insertBookName(bookName):
 @app.route("/insert/<bookName>/<volume>",methods=["POST"])
 def insertBookContents(bookName,volume):
   global isAdmin
+  isLast = False
   if not isAdmin:
     return redirect(url_for("password"))
   contentList = []
   keyList = list(request.form.keys())
   keyList.sort()
   for i in keyList:
+    if i == 'end':
+      isLast = True
+      continue
     line = request.form[i].strip()
     if line != '':
       contentList.append(request.form[i])
-  db.insertVolume(bookName=bookName,volume=volume,contentList=contentList)
-  initData()
-  return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=volume))
+  
+  if isLast :
+    db.insertVolume(bookName=bookName,volume=volume,contentList=bookQ.getContents())
+    initData()
+    return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=volume))
+  else:
+    bookQ.setContents(contentList=contentList)
+
+  
 
 @app.route("/update/<bookName>",methods=["POST"])
 def updateBookName(bookName):
