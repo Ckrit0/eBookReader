@@ -59,7 +59,9 @@ class volumeForInsert:
     def checkSetContents(self):
         chunkList = self.contents['chunkIndex']
         totalChunk = self.contents['totalChunk']
-        return math.floor((int(len(chunkList)) * 100) / totalChunk)
+        print(chunkList)
+        print(len(chunkList))
+        return math.floor((len(chunkList) * 100) / totalChunk)
     
     def setContents(self, contentDict):
         for key in contentDict.keys():
