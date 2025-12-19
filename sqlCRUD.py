@@ -124,9 +124,9 @@ def insertVolume(bookName,volume,contents):
   # 새로운 내용 추가
   contentList = []
   keyList = contents.keys()
-  sql = f"INSERT INTO CONTENT VALUES "
-  for i in range(len(keyList)):
-    sql = sql + f"((SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{i+1},'{contents[str(i)]}')"
+  sql = f"INSERT INTO CONTENT VALUES"
+  for i in keyList:
+    sql = sql + f"((SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{int(i)+1},'{contents[i]}')"
     if i < len(contentList)-1:
       sql = sql + f", "
   sqlList.append(sql)
