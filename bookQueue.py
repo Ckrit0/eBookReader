@@ -50,6 +50,7 @@ class volumeForInsert:
     def __init__(self, id):
         self.id = id
         self.chunkIndex = []
+        self.contents = {}
     
     def getId(self):
         return self.id
