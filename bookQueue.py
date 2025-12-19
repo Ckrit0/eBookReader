@@ -62,7 +62,6 @@ class volumeForInsert:
         return math.floor((len(chunkList) * 100) / int(totalChunk))
     
     def setContents(self, contentDict):
-        print(contentDict)
         for key in contentDict.keys():
             if key == "chunkIndex":
                 self.contents["chunkIndex"].append(contentDict[key])
