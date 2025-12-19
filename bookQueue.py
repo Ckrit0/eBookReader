@@ -38,7 +38,7 @@ class BookQueue:
 
     def setContents(self, contentDict):
         volume = self.getVolumeByBookId(contentDict['bookId'])
-        return volume.setContents(contentDict=contentDict), volume
+        return volume.setContents(contentDict=contentDict), contentDict['bookId']
             
     def getContents(self, bookId):
         for i in range(len(self.volumeList)):
@@ -70,8 +70,9 @@ class volumeForInsert:
         return self.checkSetContents()
     
     def getContents(self):
-        temp = self.contents.copy()
-        self.contents = {}
-        return temp
+        self.contents.pop('bookId')
+        self.contents.pop('totalChunk')
+        self.contents.pop('chunkIndex')
+        return self.contents
     
     
