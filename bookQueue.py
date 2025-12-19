@@ -61,6 +61,10 @@ class volumeForInsert:
         totalChunk = self.contents['totalChunk']
         print(chunkList)
         print(len(chunkList))
+        print(len(chunkList))
+        print(len(chunkList) * 100)
+        print((len(chunkList) * 100) / totalChunk)
+        print(math.floor((len(chunkList) * 100) / totalChunk))
         return math.floor((len(chunkList) * 100) / totalChunk)
     
     def setContents(self, contentDict):
