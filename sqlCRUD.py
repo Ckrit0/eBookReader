@@ -53,10 +53,19 @@ def setData(sql):
     con.close()
   return result
 
-
-################
-## DB 연결부분 ##
-################
+def setDatas(sqlList):
+  result = False
+  con, cur = getCursor()
+  try:
+    for sql in sqlList:
+      cur.execute(sql)
+    result = cur.fetchall()
+    con.commit()
+  except Exception as e:
+    print(e)
+  finally:
+    con.close()
+  return result
 
 # 관리자 비번 받아오기
 def getAdminPw():
@@ -108,17 +117,23 @@ def deleteBook(bookName):
   setData(sql=sql)
 
 # 볼륨 컨텐츠 추가하기(수정하기)
-def insertVolume(bookName,volume,contentList):
+def insertVolume(bookName,volume,contents):
   # 기존 내용 삭제
-  sql = f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}"
-  setData(sql=sql)
+  sqlList = []
+  sqlList.append(f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}")
   # 새로운 내용 추가
+  contents.pop('bookId')
+  contents.pop('totalChunk')
+  contents.pop('chunkIndex')
+  contentList = []
+  keyList = contents.keys()
+  keyList.sort()
   sql = f"INSERT INTO CONTENT VALUES "
-  for i in range(len(contentList)):
-    sql = sql + f"((SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{i+1},'{contentList[i]}')"
+  for i in keyList:
+    sql = sql + f"((SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{i+1},'{contents[i]}')"
     if i < len(contentList)-1:
       sql = sql + f", "
-  setData(sql=sql)
+  setDatas(sqlList=sqlList)
 
 # 볼륨 수정하기
 def updateVolume(bookName,volume,newVolume):
