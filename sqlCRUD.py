@@ -122,14 +122,11 @@ def insertVolume(bookName,volume,contents):
   sqlList = []
   sqlList.append(f"DELETE FROM CONTENT WHERE BID=(SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume}")
   # 새로운 내용 추가
-  contentList = []
   keyList = contents.keys()
-  sql = f"INSERT INTO CONTENT VALUES"
+  sql = f""
   for i in keyList:
-    sql = sql + f"((SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{int(i)+1},'{contents[i]}')"
-    if i < len(contentList)-1:
-      sql = sql + f", "
-  sqlList.append(sql)
+    sql = f"INSERT INTO CONTENT VALUES((SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{int(i)+1},'{contents[i]}')"
+    sqlList.append(sql)
   setDatas(sqlList=sqlList)
 
 # 볼륨 수정하기
