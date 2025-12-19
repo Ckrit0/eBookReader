@@ -183,8 +183,12 @@ def insertBookContents(bookName,volume):
   contentDict = {}
   for key in request.form.keys():
     contentDict[key] = request.form[key]
+    print('응답응답응답',request.form)
+    print('키키키키키키',request.form.keys())
+    print('값값값값값값',request.form[key])
   result, bookId = bookQ.setContents(contentDict=contentDict)
   contents = bookQ.getContents(bookId=bookId)
+  print(result,'%')
   if result >= 100:
     db.insertVolume(bookName=bookName, volume=volume, contents=contents)
     initData()
@@ -257,4 +261,3 @@ if __name__ == '__main__':
     debug=True,
     host='0.0.0.0'
   )
-
