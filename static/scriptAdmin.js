@@ -104,7 +104,7 @@ async function insertContents(){
     // 내용이 너무 길지 않도록 나눠서 업로드
     let targetURL = '/insert/' + bookInfo['name'] + '/' + targetVolume
     let bookId = bookInfo['name'] + '-' + targetVolume
-    let chunkSize = 100
+    let chunkSize = 500
     let totalChunk = Math.ceil(contentList.length/chunkSize)
     for(let chunkIndex=0;chunkIndex<totalChunk;chunkIndex++){
         let data = new FormData()
