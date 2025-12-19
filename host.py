@@ -184,6 +184,7 @@ def insertBookContents(bookName,volume):
   contentList = []
   keyList = list(request.form.keys())
   keyList.sort()
+  print(keyList[0])
   for i in keyList:
     if i == 'end':
       isLast = True
@@ -198,6 +199,7 @@ def insertBookContents(bookName,volume):
     return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=volume))
   else:
     bookQ.setContents(contentList=contentList)
+    return "nowUploading"
 
   
 
