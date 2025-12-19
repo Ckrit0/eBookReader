@@ -61,6 +61,7 @@ def setDatas(sqlList):
       cur.execute(sql)
     result = cur.fetchall()
     con.commit()
+    print("DB INSERT 완료")
   except Exception as e:
     print(e)
   finally:
