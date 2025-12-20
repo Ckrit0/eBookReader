@@ -28,18 +28,17 @@ def setAdmin(userId):
 
 def isAdmin(userId):
   global session
-  print('현재 세션',session)
   result = False
   try:
-    userId = session[userId]
+    sessionId = session[userId]
+    if datetime.now(tz=pytz.timezone('Asia/Seoul')) > session['setTime' + sessionId]:
+      session.pop(sessionId)
+      session.pop('setTime' + sessionId)
+    else:
+      setAdmin(userId=userId)
+      result = True
   except:
     return result
-  if datetime.now(tz=pytz.timezone('Asia/Seoul')) > session['setTime' + userId]:
-    session.pop(userId)
-    session.pop('setTime' + userId)
-  else:
-    setAdmin(userId=userId)
-    result = True
   return result
 
 bookQ = bookQueue.BookQueue()
