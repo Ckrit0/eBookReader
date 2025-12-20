@@ -89,9 +89,9 @@ def viewContentsForLine(bookName, volume, line):
 @app.route("/admin",methods=["GET"])
 def password():
     if not isAdmin(request.remote_addr):
-      return render_template('indexAdmin.html', bookList=bookList)
-    else:
       return render_template('password.html')
+    else:
+      return render_template('indexAdmin.html', bookList=bookList)
 
 @app.route("/admin",methods=["POST"])
 def admin():
