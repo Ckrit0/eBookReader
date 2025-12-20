@@ -116,7 +116,7 @@ function setSection(){
         var c = lines[i].innerText
         if(c.startsWith('$$')){
             lines[i].innerText = lines[i].innerText.replace('$$','')
-            lines[i].classList.append('c_section') // 제왕절개 아님
+            lines[i].classList.push('c_section') // 제왕절개 아님
         }
     }
 }
