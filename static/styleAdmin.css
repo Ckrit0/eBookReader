@@ -38,4 +38,5 @@
 #contentsArea{
     width: -webkit-fill-available;
     height: 70vh;
+    padding: 10px;
 }
