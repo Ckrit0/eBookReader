@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 import pytz
 
 sessionTime = 1 # 세션의 적용시간(hour)
-session = {}
 
 def initData():
   global bookInfo, bookList, bookQ
@@ -27,7 +26,6 @@ def setAdmin(userId):
   session['setTime' + userId] = datetime.now(tz=pytz.timezone('Asia/Seoul')) + timedelta(hours=sessionTime)
 
 def getAdmin(userId):
-  userId = ''
   try:
     userId = session[userId]
   except:
@@ -43,7 +41,7 @@ def getAdmin(userId):
 bookQ = bookQueue.BookQueue()
 bookInfo = initBookInfo()
 bookList = db.getBookList()
-
+session = {}
 app = Flask(__name__)
 
 @app.route("/")
