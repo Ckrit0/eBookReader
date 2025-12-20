@@ -22,15 +22,15 @@ def initBookInfo():
   return bookInfo
 
 def setAdmin(userId):
-  timeZone = pytz.timezone('Aisa/Seoul')
+  timeZone = pytz.timezone('Asia/Seoul')
   session[userId] = userId
-  session['setTime' + userId] = datetime.now(tz=timeZone) + timedelta(hours=sessionTime)
+  session['setTime' + userId] = datetime.now(timeZone) + timedelta(hours=sessionTime)
 
 def getAdmin(userId):
   userId = session.get(userId)
   if userId == None:
     return False
-  timeZone = pytz.timezone('Aisa/Seoul')
+  timeZone = pytz.timezone('Asia/Seoul')
   now = datetime.now(tz=timeZone)
   setTime = session.get('setTime' + userId)
   if now > setTime:
