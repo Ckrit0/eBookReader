@@ -27,21 +27,18 @@ def setAdmin(userId):
   session['setTime' + userId] = datetime.now(tz=pytz.timezone('Asia/Seoul')) + timedelta(hours=sessionTime)
 
 def getAdmin(userId):
-  userId = session[userId]
-  print('session:',session)
-  print('userId:',userId)
-  print('현재:',datetime.now(tz=pytz.timezone('Asia/Seoul')))
-  print('설정시간:',session.get('setTime' + userId))
-  print('현재가 더 미래임?',datetime.now(tz=pytz.timezone('Asia/Seoul')) > session.get('setTime' + userId))
-  if userId == None:
-    pass
-  elif datetime.now(tz=pytz.timezone('Asia/Seoul')) > session.get('setTime' + userId):
+  userId = ''
+  try:
+    userId = session[userId]
+  except:
+    return False
+  if datetime.now(tz=pytz.timezone('Asia/Seoul')) > session['setTime' + userId]:
     session.pop(userId)
     session.pop('setTime' + userId)
+    return False
   else:
     setAdmin(userId=userId)
     return True
-  return False
 
 bookQ = bookQueue.BookQueue()
 bookInfo = initBookInfo()
