@@ -1,8 +1,10 @@
-# 관리자모드 세션방식으로 바꿔야 함
-
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import sqlCRUD as db
 import bookQueue
+from datetime import datetime, timedelta
+
+# 설정용 변수
+sessionTime = 1 # 세션의 적용시간(hour)
 
 # 수정 후 데이터 초기화
 def initData():
@@ -21,10 +23,30 @@ def initBookInfo():
   }
   return bookInfo
 
+# admin session 추가
+def setAdmin(userId):
+  session[userId] = userId
+  session['setTime' + userId] = datetime.now() + timedelta(hours=sessionTime)
+
+# admin session 확인
+def getAdmin(userId):
+  now = datetime.now()
+  userId = session.get(userId)
+  setTime = session.get('setTime' + userId)
+  if userId == None:
+    return False
+  elif now > setTime: # 요청한 id가 유효시간 초과시, 세션 제거
+    session.pop(userId)
+    session.pop('setTime' + userId)
+    return False
+  else: # admin을 확인하면 session 시간 초기화
+    setAdmin(userId=userId)
+    return True
+
 bookQ = bookQueue.BookQueue()
 bookInfo = initBookInfo()
 bookList = db.getBookList()
-isAdmin = False
+
 
 
 #######################
@@ -32,11 +54,12 @@ isAdmin = False
 #######################
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secretKeyIsCkritKey'
 
 # /
 @app.route("/")
 def main():
-  return  render_template('index.html', bookList=bookList)
+  return render_template('index.html', bookList=bookList)
 
 # /도서명
 @app.route("/read/<bookName>")
@@ -77,8 +100,7 @@ def viewContentsForLine(bookName, volume, line):
 # /admin GET
 @app.route("/admin",methods=["GET"])
 def password():
-    global isAdmin
-    if isAdmin:
+    if getAdmin(request.remote_addr):
       return render_template('indexAdmin.html', bookList=bookList)
     else:
       return render_template('password.html')
@@ -86,11 +108,10 @@ def password():
 # /admin POST
 @app.route("/admin",methods=["POST"])
 def admin():
-    global isAdmin
-    if isAdmin:
+    if getAdmin(request.remote_addr):
       return render_template('admin.html', bookList=bookList)
     elif request.form['password'] == db.getAdminPw():
-      isAdmin = True
+      setAdmin(request.remote_addr)
       return render_template('indexAdmin.html', bookList=bookList)
     else:
       return render_template('password.html')
@@ -98,8 +119,7 @@ def admin():
 # /admin/도서명
 @app.route("/admin/<bookName>")
 def selectVolumeAdmin(bookName):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   bookInfo = initBookInfo()
   bookInfo['name'] = bookName
@@ -110,8 +130,7 @@ def selectVolumeAdmin(bookName):
 # /admin/도서명/권(화)
 @app.route("/admin/<bookName>/<volume>")
 def viewContentsAdmin(bookName, volume):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   lastVolume = db.getLastVolume(bookName=bookName)
   try :
@@ -130,8 +149,7 @@ def viewContentsAdmin(bookName, volume):
 # /admin/도서명/권(화)/줄
 @app.route("/admin/<bookName>/<volume>/<line>")
 def viewContentsForLineAdmin(bookName, volume, line):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   bookQ.setLine(line=line)
   bookQ.setVolume(volume=int(volume))
@@ -140,8 +158,7 @@ def viewContentsForLineAdmin(bookName, volume, line):
 # /insert/도서명
 @app.route("/insert/<bookName>", methods=['GET'])
 def insertContents(bookName):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   bookInfo = initBookInfo()
   bookInfo['name'] = bookName
@@ -152,8 +169,7 @@ def insertContents(bookName):
 # /insert/도서명/권(화)
 @app.route("/insert/<bookName>/<volume>")
 def modifyContents(bookName, volume):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   bookInfo = initBookInfo()
   bookInfo['name'] = bookName
@@ -168,8 +184,7 @@ def modifyContents(bookName, volume):
 
 @app.route("/insert/<bookName>",methods=["POST"])
 def insertBookName(bookName):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   db.insertBook(bookName=bookName)
   initData()
@@ -177,8 +192,7 @@ def insertBookName(bookName):
 
 @app.route("/insert/<bookName>/<volume>",methods=["POST"])
 def insertBookContents(bookName,volume):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   contentDict = {}
   for key in request.form.keys():
@@ -195,8 +209,7 @@ def insertBookContents(bookName,volume):
 
 @app.route("/update/<bookName>",methods=["POST"])
 def updateBookName(bookName):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   newName = request.form['data']
   db.updateBook(bookName=bookName,newName=newName)
@@ -205,8 +218,7 @@ def updateBookName(bookName):
 
 @app.route("/update/<bookName>/<volume>",methods=["POST"])
 def updateBookVolume(bookName,volume):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   newVolume = request.form['data']
   db.updateVolume(bookName=bookName,volume=volume,newVolume=newVolume)
@@ -215,8 +227,7 @@ def updateBookVolume(bookName,volume):
 
 @app.route("/update/<bookName>/<volume>/<line>/<redLine>",methods=["POST"])
 def updateBookContent(bookName,volume,line,redLine):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   content = request.form['data']
   db.updateContent(bookName=bookName,volume=volume,line=line,content=content)
@@ -225,8 +236,7 @@ def updateBookContent(bookName,volume,line,redLine):
 
 @app.route("/delete/<bookName>",methods=["POST"])
 def deleteBookName(bookName):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   db.deleteBook(bookName=bookName)
   initData()
@@ -234,8 +244,7 @@ def deleteBookName(bookName):
 
 @app.route("/delete/<bookName>/<volume>",methods=["POST"])
 def deleteBookVolume(bookName,volume):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   db.deleteVolume(bookName=bookName,volume=volume)
   initData()
@@ -243,8 +252,7 @@ def deleteBookVolume(bookName,volume):
 
 @app.route("/delete/<bookName>/<volume>/<line>",methods=["POST"])
 def deleteBookContent(bookName,volume,line):
-  global isAdmin
-  if not isAdmin:
+  if getAdmin(request.remote_addr):
     return redirect(url_for("password"))
   db.deleteContent(bookName=bookName,volume=volume,line=line)
   initData()
