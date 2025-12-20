@@ -150,16 +150,16 @@ def deleteVolume(bookName,volume):
 
 def updateContent(bookName,volume,line,content):
   sql = f'''UPDATE CONTENT
-    SET CONTENTS = '{content}'
+    SET CONTENTS = '{content}' 
     WHERE
-      BID = (SELECT BID FROM INFO WHERE NAME='{bookName}'
+      BID = (SELECT BID FROM INFO WHERE NAME='{bookName}')
       AND VOLUME = {volume}
       AND LINE = {line}'''
   setData(sql=sql)
 
 def deleteContent(bookName,volume,line):
   sqlList = []
-  deleteSql = f"DELETE CONTENT WHERE  BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume} AND LINE = {line}"
+  deleteSql = f"DELETE CONTENT WHERE BID = (SELECT BID FROM INFO WHERE NAME='{bookName}') AND VOLUME = {volume} AND LINE = {line}"
   sqlList.append(deleteSql)
   updateLineNumberSql = f'''UPDATE CONTENT
     SET LINE = (
