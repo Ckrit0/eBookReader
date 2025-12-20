@@ -38,7 +38,7 @@ def getAdmin(userId):
     session.pop(userId)
     session.pop('setTime' + userId)
   else:
-    setAdmin(userId=userId)
+    #setAdmin(userId=userId)
     return True
   return False
 
