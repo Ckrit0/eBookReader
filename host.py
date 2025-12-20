@@ -30,16 +30,19 @@ def isAdmin(userId):
   global session
   result = False
   try:
+    print('try 시작')
     sessionId = session[userId]
+    print('세션ID 가져옴:',sessionId)
     setTime = session['setTime' + sessionId]
+    print('설정시간 가져옴:',setTime)
     now = datetime.now(tz=pytz.timezone('Asia/Seoul'))
-    print('세션ID:',sessionId)
-    print('설정시간:',setTime)
-    print('지금시간:',now)
+    print('지금시간 가져옴:',now)
     if now > setTime:
+      print('설정시간 지남:',now)
       session.pop(sessionId)
       session.pop('setTime' + sessionId)
     else:
+      print('설정시간 안지남:',now)
       setAdmin(userId=userId)
       result = True
   except Exception as e:
