@@ -42,8 +42,9 @@ def isAdmin(userId):
     else:
       setAdmin(userId=userId)
       result = True
-  except:
-    return result
+  except Exception as e:
+    print(e)
+    return False
   return result
 
 bookQ = bookQueue.BookQueue()
