@@ -29,12 +29,12 @@ def getAdmin(userId):
   userId = session.get(userId)
   print('session:',session)
   print('userId:',userId)
+  print('현재:',datetime.now(tz=pytz.timezone('Asia/Seoul')))
+  print('설정시간:',session.get('setTime' + userId))
+  print('현재가 더 미래임?',datetime.now(tz=pytz.timezone('Asia/Seoul')) > session.get('setTime' + userId))
   if userId == None:
     pass
   elif datetime.now(tz=pytz.timezone('Asia/Seoul')) > session.get('setTime' + userId):
-    print('현재:',datetime.now(tz=pytz.timezone('Asia/Seoul')))
-    print('설정시간:',session.get('setTime' + userId))
-    print('현재가 더 미래임?',datetime.now(tz=pytz.timezone('Asia/Seoul')) > session.get('setTime' + userId))
     session.pop(userId)
     session.pop('setTime' + userId)
   else:
