@@ -30,19 +30,13 @@ def isAdmin(userId):
   global session
   result = False
   try:
-    print('try 시작')
     sessionId = session[userId]
-    print('세션ID 가져옴:',sessionId)
     setTime = session['setTime' + sessionId]
-    print('설정시간 가져옴:',setTime)
     now = datetime.now(tz=pytz.timezone('Asia/Seoul'))
-    print('지금시간 가져옴:',now)
     if now > setTime:
-      print('설정시간 지남:',now)
       session.pop(sessionId)
       session.pop('setTime' + sessionId)
     else:
-      print('설정시간 안지남:',now)
       setAdmin(userId=userId)
       result = True
   except Exception as e:
@@ -94,14 +88,14 @@ def viewContentsForLine(bookName, volume, line):
 
 @app.route("/admin",methods=["GET"])
 def password():
-    if isAdmin(request.remote_addr):
+    if not isAdmin(request.remote_addr):
       return render_template('indexAdmin.html', bookList=bookList)
     else:
       return render_template('password.html')
 
 @app.route("/admin",methods=["POST"])
 def admin():
-    if isAdmin(request.remote_addr):
+    if not isAdmin(request.remote_addr):
       return render_template('admin.html', bookList=bookList)
     elif request.form['password'] == db.getAdminPw():
       setAdmin(request.remote_addr)
@@ -111,7 +105,7 @@ def admin():
 
 @app.route("/admin/<bookName>")
 def selectVolumeAdmin(bookName):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   bookInfo = initBookInfo()
   bookInfo['name'] = bookName
@@ -121,7 +115,7 @@ def selectVolumeAdmin(bookName):
 
 @app.route("/admin/<bookName>/<volume>")
 def viewContentsAdmin(bookName, volume):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   lastVolume = db.getLastVolume(bookName=bookName)
   try :
@@ -139,7 +133,7 @@ def viewContentsAdmin(bookName, volume):
 
 @app.route("/admin/<bookName>/<volume>/<line>")
 def viewContentsForLineAdmin(bookName, volume, line):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   bookQ.setLine(line=line)
   bookQ.setVolume(volume=int(volume))
@@ -147,7 +141,7 @@ def viewContentsForLineAdmin(bookName, volume, line):
 
 @app.route("/insert/<bookName>", methods=['GET'])
 def insertContents(bookName):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   bookInfo = initBookInfo()
   bookInfo['name'] = bookName
@@ -157,7 +151,7 @@ def insertContents(bookName):
 
 @app.route("/insert/<bookName>/<volume>")
 def modifyContents(bookName, volume):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   bookInfo = initBookInfo()
   bookInfo['name'] = bookName
@@ -172,7 +166,7 @@ def modifyContents(bookName, volume):
 
 @app.route("/insert/<bookName>",methods=["POST"])
 def insertBookName(bookName):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   db.insertBook(bookName=bookName)
   initData()
@@ -180,7 +174,7 @@ def insertBookName(bookName):
 
 @app.route("/insert/<bookName>/<volume>",methods=["POST"])
 def insertBookContents(bookName,volume):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   contentDict = {}
   for key in request.form.keys():
@@ -196,7 +190,7 @@ def insertBookContents(bookName,volume):
 
 @app.route("/update/<bookName>",methods=["POST"])
 def updateBookName(bookName):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   newName = request.form['data']
   db.updateBook(bookName=bookName,newName=newName)
@@ -205,7 +199,7 @@ def updateBookName(bookName):
 
 @app.route("/update/<bookName>/<volume>",methods=["POST"])
 def updateBookVolume(bookName,volume):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   newVolume = request.form['data']
   db.updateVolume(bookName=bookName,volume=volume,newVolume=newVolume)
@@ -214,7 +208,7 @@ def updateBookVolume(bookName,volume):
 
 @app.route("/update/<bookName>/<volume>/<line>/<redLine>",methods=["POST"])
 def updateBookContent(bookName,volume,line,redLine):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   content = request.form['data']
   db.updateContent(bookName=bookName,volume=volume,line=line,content=content)
@@ -223,7 +217,7 @@ def updateBookContent(bookName,volume,line,redLine):
 
 @app.route("/delete/<bookName>",methods=["POST"])
 def deleteBookName(bookName):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   db.deleteBook(bookName=bookName)
   initData()
@@ -231,7 +225,7 @@ def deleteBookName(bookName):
 
 @app.route("/delete/<bookName>/<volume>",methods=["POST"])
 def deleteBookVolume(bookName,volume):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   db.deleteVolume(bookName=bookName,volume=volume)
   initData()
@@ -239,7 +233,7 @@ def deleteBookVolume(bookName,volume):
 
 @app.route("/delete/<bookName>/<volume>/<line>",methods=["POST"])
 def deleteBookContent(bookName,volume,line):
-  if isAdmin(request.remote_addr):
+  if not isAdmin(request.remote_addr):
     return redirect(url_for("password"))
   db.deleteContent(bookName=bookName,volume=volume,line=line)
   initData()
