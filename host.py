@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlCRUD as db
 import bookQueue
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
+import pytz
 
 sessionTime = 1 # 세션의 적용시간(hour)
 
@@ -21,14 +22,16 @@ def initBookInfo():
   return bookInfo
 
 def setAdmin(userId):
+  timeZone = pytz.timezone('Aisa/Seoul')
   session[userId] = userId
-  session['setTime' + userId] = datetime.now(timezone('Asia/Seoul')) + timedelta(hours=sessionTime)
+  session['setTime' + userId] = datetime.now(tz=timeZone) + timedelta(hours=sessionTime)
 
 def getAdmin(userId):
   userId = session.get(userId)
   if userId == None:
     return False
-  now = datetime.now(timezone('Asia/Seoul'))
+  timeZone = pytz.timezone('Aisa/Seoul')
+  now = datetime.now(tz=timeZone)
   setTime = session.get('setTime' + userId)
   if now > setTime:
     session.pop(userId)
