@@ -97,13 +97,9 @@ def password():
 
 @app.route("/admin",methods=["POST"])
 def admin():
-    if not isAdmin(request.remote_addr):
-      return render_template('password.html')
-    elif request.form['password'] == db.getAdminPw():
+    if request.form['password'] == db.getAdminPw():
       setAdmin(request.remote_addr)
-      return redirect(url_for("password"))
-    else:
-      return redirect(url_for("password"))
+    return redirect(url_for("password"))
 
 @app.route("/admin/<bookName>")
 def selectVolumeAdmin(bookName):
