@@ -28,6 +28,7 @@ def setAdmin(userId):
 
 def isAdmin(userId):
   global session
+  print(session)
   result = False
   try:
     sessionId = session[userId]
@@ -99,7 +100,7 @@ def admin():
       return render_template('password.html')
     elif request.form['password'] == db.getAdminPw():
       setAdmin(request.remote_addr)
-      return render_template('indexAdmin.html', bookList=bookList)
+      return redirect(url_for("password"))
     else:
       return redirect(url_for("password"))
 
