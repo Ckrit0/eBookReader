@@ -174,8 +174,6 @@ a{
     font-size: 10px;
 }
 
-.c_line:hover{
-    color: var(--highlight-color);
+.c_section{
     font-weight: bold;
-    cursor: pointer;
 }
