@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for
 import sqlCRUD as db
 import bookQueue
 from datetime import datetime, timedelta
 import pytz
 
 sessionTime = 1 # 세션의 적용시간(hour)
+session = {}
 
 def initData():
   global bookInfo, bookList, bookQ
@@ -26,7 +27,7 @@ def setAdmin(userId):
   session['setTime' + userId] = datetime.now(tz=pytz.timezone('Asia/Seoul')) + timedelta(hours=sessionTime)
 
 def getAdmin(userId):
-  userId = session.get(userId)
+  userId = session[userId]
   print('session:',session)
   print('userId:',userId)
   print('현재:',datetime.now(tz=pytz.timezone('Asia/Seoul')))
@@ -38,7 +39,7 @@ def getAdmin(userId):
     session.pop(userId)
     session.pop('setTime' + userId)
   else:
-    #setAdmin(userId=userId)
+    setAdmin(userId=userId)
     return True
   return False
 
@@ -47,7 +48,6 @@ bookInfo = initBookInfo()
 bookList = db.getBookList()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secretKeyIsCkritKey'
 
 @app.route("/")
 def main():
