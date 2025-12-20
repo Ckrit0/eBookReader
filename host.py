@@ -25,18 +25,17 @@ def setAdmin(userId):
   session['setTime' + userId] = datetime.now() + timedelta(hours=sessionTime)
 
 def getAdmin(userId):
-  now = datetime.now()
   userId = session.get(userId)
-  setTime = session.get('setTime' + userId)
   if userId == None:
     return False
-  elif now > setTime: # 요청한 id가 유효시간 초과시, 세션 제거
+  now = datetime.now()
+  setTime = session.get('setTime' + userId)
+  if now > setTime:
     session.pop(userId)
     session.pop('setTime' + userId)
     return False
-  else: # admin을 확인하면 session 시간 초기화
-    setAdmin(userId=userId)
-    return True
+  setAdmin(userId=userId)
+  return True
 
 bookQ = bookQueue.BookQueue()
 bookInfo = initBookInfo()
