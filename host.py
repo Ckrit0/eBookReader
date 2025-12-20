@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlCRUD as db
 import bookQueue
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 sessionTime = 1 # 세션의 적용시간(hour)
 
@@ -22,13 +22,13 @@ def initBookInfo():
 
 def setAdmin(userId):
   session[userId] = userId
-  session['setTime' + userId] = datetime.now() + timedelta(hours=sessionTime)
+  session['setTime' + userId] = datetime.now(timezone('Asia/Seoul')) + timedelta(hours=sessionTime)
 
 def getAdmin(userId):
   userId = session.get(userId)
   if userId == None:
     return False
-  now = datetime.now()
+  now = datetime.now(timezone('Asia/Seoul'))
   setTime = session.get('setTime' + userId)
   if now > setTime:
     session.pop(userId)
