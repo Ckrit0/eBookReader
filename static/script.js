@@ -108,3 +108,15 @@ function setSpaceEvent(){
         }
     })
 }
+
+// 단락 제목 찾아서 글씨체 바꾸기
+function setSection(){
+    let lines = document.getElementsByClassName('c_line')
+    for(var i in lines){
+        var c = lines[i].innerText
+        if(c.startsWith('$$')){
+            lines[i].innerText = lines[i].innerText.replace('$$','')
+            lines[i].classList.push('c_section') // 제왕절개 아님
+        }
+    }
+}
