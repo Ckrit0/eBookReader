@@ -31,7 +31,12 @@ def isAdmin(userId):
   result = False
   try:
     sessionId = session[userId]
-    if datetime.now(tz=pytz.timezone('Asia/Seoul')) > session['setTime' + sessionId]:
+    setTime = session['setTime' + sessionId]
+    now = datetime.now(tz=pytz.timezone('Asia/Seoul'))
+    print('세션ID:',sessionId)
+    print('설정시간:',setTime)
+    print('지금시간:',now)
+    if now > setTime:
       session.pop(sessionId)
       session.pop('setTime' + sessionId)
     else:
