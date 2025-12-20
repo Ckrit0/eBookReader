@@ -25,10 +25,11 @@ def setAdmin(userId):
   global session
   session[userId] = userId
   session['setTime' + userId] = datetime.now(tz=pytz.timezone('Asia/Seoul')) + timedelta(hours=sessionTime)
+  print('set:',session)
 
 def isAdmin(userId):
   global session
-  print(session)
+  print('ready:',session)
   result = False
   try:
     sessionId = session[userId]
