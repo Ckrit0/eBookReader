@@ -3,17 +3,14 @@ import sqlCRUD as db
 import bookQueue
 from datetime import datetime, timedelta
 
-# 설정용 변수
 sessionTime = 1 # 세션의 적용시간(hour)
 
-# 수정 후 데이터 초기화
 def initData():
   global bookInfo, bookList, bookQ
   bookInfo = initBookInfo()
   bookList = db.getBookList()
   bookQ = bookQueue.BookQueue()
 
-# bookInfo 초기화
 def initBookInfo():
   bookInfo = {
     'name' : '',
@@ -23,12 +20,10 @@ def initBookInfo():
   }
   return bookInfo
 
-# admin session 추가
 def setAdmin(userId):
   session[userId] = userId
   session['setTime' + userId] = datetime.now() + timedelta(hours=sessionTime)
 
-# admin session 확인
 def getAdmin(userId):
   now = datetime.now()
   userId = session.get(userId)
@@ -47,21 +42,13 @@ bookQ = bookQueue.BookQueue()
 bookInfo = initBookInfo()
 bookList = db.getBookList()
 
-
-
-#######################
-## Flask 웹 서버 부분 ##
-#######################
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretKeyIsCkritKey'
 
-# /
 @app.route("/")
 def main():
   return render_template('index.html', bookList=bookList)
 
-# /도서명
 @app.route("/read/<bookName>")
 def selectVolume(bookName):
   bookInfo = initBookInfo()
@@ -70,7 +57,6 @@ def selectVolume(bookName):
   volumes = db.getVolumes(bookName=bookName)
   return render_template('selectVolume.html', bookList=bookList, bookInfo=bookInfo, volumes=volumes)
 
-# /도서명/권(화)
 @app.route("/read/<bookName>/<volume>")
 def viewContents(bookName, volume):
   lastVolume = db.getLastVolume(bookName=bookName)
@@ -89,15 +75,12 @@ def viewContents(bookName, volume):
   contents = db.getContents(bookName=bookName,volume=volume)
   return render_template('contents.html', bookList=bookList, bookInfo=bookInfo, contents=contents)
 
-# /도서명/권(화)/줄
 @app.route("/read/<bookName>/<volume>/<line>")
 def viewContentsForLine(bookName, volume, line):
   bookQ.setLine(line=line)
   bookQ.setVolume(volume=int(volume))
   return redirect(url_for('viewContents',bookName=bookName, volume=volume))
 
-
-# /admin GET
 @app.route("/admin",methods=["GET"])
 def password():
     if getAdmin(request.remote_addr):
@@ -105,7 +88,6 @@ def password():
     else:
       return render_template('password.html')
 
-# /admin POST
 @app.route("/admin",methods=["POST"])
 def admin():
     if getAdmin(request.remote_addr):
@@ -116,7 +98,6 @@ def admin():
     else:
       return render_template('password.html')
 
-# /admin/도서명
 @app.route("/admin/<bookName>")
 def selectVolumeAdmin(bookName):
   if getAdmin(request.remote_addr):
@@ -127,7 +108,6 @@ def selectVolumeAdmin(bookName):
   volumes = db.getVolumes(bookName=bookName)
   return render_template('selectVolumeAdmin.html', bookList=bookList, bookInfo=bookInfo, volumes=volumes)
 
-# /admin/도서명/권(화)
 @app.route("/admin/<bookName>/<volume>")
 def viewContentsAdmin(bookName, volume):
   if getAdmin(request.remote_addr):
@@ -146,7 +126,6 @@ def viewContentsAdmin(bookName, volume):
   contents = db.getContents(bookName=bookName,volume=volume)
   return render_template('contentsAdmin.html', bookList=bookList, bookInfo=bookInfo, contents = contents)
 
-# /admin/도서명/권(화)/줄
 @app.route("/admin/<bookName>/<volume>/<line>")
 def viewContentsForLineAdmin(bookName, volume, line):
   if getAdmin(request.remote_addr):
@@ -155,7 +134,6 @@ def viewContentsForLineAdmin(bookName, volume, line):
   bookQ.setVolume(volume=int(volume))
   return redirect(url_for('viewContentsAdmin',bookName=bookName, volume=volume))
 
-# /insert/도서명
 @app.route("/insert/<bookName>", methods=['GET'])
 def insertContents(bookName):
   if getAdmin(request.remote_addr):
@@ -166,7 +144,6 @@ def insertContents(bookName):
   initData()
   return render_template('insertContents.html', bookList=bookList, bookInfo=bookInfo, bookName=bookName)
 
-# /insert/도서명/권(화)
 @app.route("/insert/<bookName>/<volume>")
 def modifyContents(bookName, volume):
   if getAdmin(request.remote_addr):
@@ -205,7 +182,6 @@ def insertBookContents(bookName,volume):
     return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=volume))
   else :
     return str(result) + "%"
-
 
 @app.route("/update/<bookName>",methods=["POST"])
 def updateBookName(bookName):
