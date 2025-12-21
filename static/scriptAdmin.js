@@ -216,3 +216,17 @@ function deleteTarget(type, lineId){
     imWorking(targetBtn)
     postAPI(targetURL, {})
 }
+
+/**
+ * 컨텐츠 에어리어에 focus주고 ctrl+s 키 저장기능 설정
+ */
+function contentsAreaSetting(){
+    let c_area = document.getElementById('contentsArea')
+    c_area.focus()
+    c_area.addEventListener('keydown',(e)=>{
+        if (e.ctrlKey && e.key === 's') {
+            e.preventDefault();
+            insertContents()
+        }
+    })
+}
