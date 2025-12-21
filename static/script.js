@@ -1,4 +1,6 @@
-// 선택한 책 표시
+/**
+ * 선택한 책 표시
+ */
 function accentSelectBook(){
     let bookList = document.getElementsByClassName('bookList')
     for(index in bookList){
@@ -10,7 +12,9 @@ function accentSelectBook(){
     
 }
 
-// 상단바 이동
+/**
+ * 상단바 이동 기능 셋팅
+ */
 function useNavBar(){
     function movePage(){
         if(volumeInput.value == bookInfo['volume']){
@@ -35,7 +39,10 @@ function useNavBar(){
     moveBtn.addEventListener('click',movePage)
 }
 
-// 페이지 이동
+/**
+ * 이전 혹은 다음 페이지가 없을 때 알람 띄우기
+ * @param {*} preOrNext 
+ */
 function noExistPage(preOrNext){
     if(preOrNext == 0){
         alert("첫 페이지입니다.")
@@ -44,7 +51,9 @@ function noExistPage(preOrNext){
     }
 }
 
-// line input update
+/**
+ * 페이지 높이에 따라 lineInput에 몇번째 줄인지 update
+ */
 function findLine(){
     let cl = document.getElementById('contentLine')
     let clRect = cl.getBoundingClientRect()
@@ -63,7 +72,18 @@ function findLine(){
     }
 }
 
-// 원하는 라인으로 이동
+/**
+ * 스크롤시 findLine() 실행하는 이벤트리스너 등록
+ */
+function setScrollEvent(){
+    let cl = document.getElementById('contentLine')
+    cl.addEventListener('scroll',findLine)
+}
+
+/**
+ * 원하는 라인으로 이동
+ * @param {*} toLineNumber 
+ */
 function moveLine(toLineNumber){
     function getLines(){
         let tempLines = cl.childNodes
@@ -93,13 +113,9 @@ function moveLine(toLineNumber){
     cl.scrollTo({top:moveScrollCoord,behavior:"smooth"})
 }
 
-// 스크롤 이벤트리스너 등록
-function setScrollEvent(){
-    let cl = document.getElementById('contentLine')
-    cl.addEventListener('scroll',findLine)
-}
-
-// 스페이스 누르면 한페이지 스크롤
+/**
+ * 스페이스 누르면 한페이지 스크롤하는 이벤트 설정
+ */
 function setSpaceEvent(){
     document.addEventListener('keydown',(e)=>{
         if(e.key == ' '){
@@ -109,7 +125,9 @@ function setSpaceEvent(){
     })
 }
 
-// 단락 제목 찾아서 글씨체 바꾸기
+/**
+ * 단락 제목 찾아서 글씨체 바꾸기
+ */
 function setSection(){
     let lines = document.getElementsByClassName('c_line')
     for(var i in lines){
