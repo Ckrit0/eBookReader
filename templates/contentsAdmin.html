@@ -11,7 +11,7 @@
         <div id="modAllDiv"><button id="modAllBtn" onclick="modifyVolume()">전체 수정</button></div>
         {% for content in contents %}
         <p id="c_{{loop.index}}" class="c_line">
-            <span id="boxline{{loop.index}}">{{content}}</span>
+            <span id="boxline{{loop.index}}">&nbsp;{{content}}</span>
             <span id="modline{{loop.index}}" class="lineBtn" onclick="changeInput('line','{{loop.index}}')">✏️</span>
             <span id="delline{{loop.index}}" class="lineBtn" onclick="deleteTarget('line','{{loop.index}}')">❌</span>
         </p>
