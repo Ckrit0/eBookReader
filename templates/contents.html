@@ -9,7 +9,7 @@
     {% endif %}
     <div id="contentLine">
         {% for content in contents %}
-        <p class="c_line" id="c_{{loop.index}}"> {{content}}</p>
+        <p class="c_line" id="c_{{loop.index}}">&nbsp;{{content}}</p>
         {% endfor %}
     </div>
     {% if bookInfo['volume'] >= bookInfo['lastVolume'] %}
