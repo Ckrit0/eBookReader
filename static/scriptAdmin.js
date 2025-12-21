@@ -204,7 +204,7 @@ function deleteTarget(type, lineId){
         targetURL = "/delete/" + lineId
     }else if(type == "vol"){
         typeName = "권(화)을"
-        targetURL = "/delete/" + bookInfo['name'] + "/" + bookInfo['volume']
+        targetURL = "/delete/" + bookInfo['name'] + "/" + lineId
     }else if(type == "line"){
         typeName = "줄을"
         targetURL = "/delete/" + bookInfo['name'] + "/" + bookInfo['volume'] + "/" + lineId
