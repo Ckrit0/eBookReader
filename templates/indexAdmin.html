@@ -24,7 +24,7 @@
     <header id="header">
         <a href="/"><h2 id="headTitle">eBookReader(end Adm)</h2></a>
         {% if bookInfo %}
-        <p>
+        <p id="headNavBar">
             <span id="headName">{{bookInfo['name']}} </span>
             / <input id="headVolume" class="headInput" name="headValue" type="text" value="{{bookInfo['volume']}}" />권(화)
             / <input id="headLine" class="headInput" name="headLine" type="text" value="{{bookInfo['line']}}" />줄
