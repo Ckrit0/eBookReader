@@ -181,3 +181,51 @@ a{
     font-weight: bold;
     font-size: 20px;
 }
+
+/* 태블릿 (768px 초과 ~ 1023px 이하) */
+@media (max-width: 1023px) {
+  /* 태블릿 스타일 */
+}
+
+/* 모바일 (480px 초과 ~ 767px 이하) */
+@media (max-width: 767px) {
+  /* 모바일 스타일 */
+}
+
+/* 더 작은 모바일 (480px 이하) */
+@media (max-width: 480px) {
+    #header{
+        grid-column-end: 3;
+        height: 5vh;
+        padding-bottom: 10px;
+    }
+    
+    #headNavBar{
+        display: none;
+    }
+
+    #sidebar{
+        position: absolute;
+        min-height: 0;
+        border: 2px solid var(--main-theme-color);
+        overflow: auto;
+        background: var(--main-bg-color);
+    }
+
+    #sidebar > ul{
+        padding: 0;
+    }
+
+    #contents{
+        grid-column: 1;
+        grid-column-end: 3;
+        padding: 10px;
+        min-height: 80vh;
+        max-height: 80vh;
+        overflow: auto;
+    }
+
+    #footer{
+        grid-column-end: 3;
+    }
+}
