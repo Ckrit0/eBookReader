@@ -32,7 +32,7 @@
     </header>
     <sidebar id="sidebar">
         <ul>
-            <li>- 제목순</li>
+            <li onclick="toggleMobileNavBar()">-도서목록</li>
             {% for bookName in bookList %}
             <a href="/read/{{bookName}}"><li class="bookList">{{bookName}}</li></a>
             {% endfor %}
