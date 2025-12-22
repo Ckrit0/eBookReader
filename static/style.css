@@ -233,10 +233,8 @@ a{
         grid-row: 2;
         grid-column: 1;
         margin: 5px auto;
-        padding: 0 5px;
         font-size: 20px;
         font-weight: bold;
-        border: 2px solid var(--main-theme-color);
     }
 
     #contentLine{
@@ -254,9 +252,7 @@ a{
         grid-row: 2;
         grid-column: 2;
         margin: 5px auto;
-        padding: 0 5px;
         font-size: 20px;
         font-weight: bold;
-        border: 2px solid var(--main-theme-color);
     }
 }
