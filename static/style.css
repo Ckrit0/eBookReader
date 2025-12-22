@@ -207,13 +207,20 @@ a{
     #sidebar{
         position: absolute;
         min-height: 0;
-        border: 2px solid var(--main-theme-color);
-        overflow: auto;
+        height: 30px;
+        border: 0px;
+        overflow: hidden;
         background: var(--main-bg-color);
+        right: 10px;
+        top: 0px;
     }
 
     #sidebar > ul{
         padding: 0;
+    }
+
+    .bookList{
+        display: none;
     }
 
     #contents{
