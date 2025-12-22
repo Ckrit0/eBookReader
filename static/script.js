@@ -138,3 +138,37 @@ function setSection(){
         }
     }
 }
+
+/**
+ * 모바일 화면일 경우, 도서 목록을 클릭으로 열고 닫기
+ */
+function toggleMobileNavBar(){
+    if(document.documentElement.clientWidth >= 768){
+        return
+    }
+    function toggleOn(sideBar,bookListInNavBar){
+        sideBar.style['border'] = '2px solid var(--main-theme-color)'
+        sideBar.style['overflow'] = 'auto'
+        sideBar.style['height'] = '50vh'
+        for(var i in bookListInNavBar){
+            bookListInNavBar[i].style['display'] = 'block'
+        }
+    }
+    function toggleOff(sideBar,bookListInNavBar){
+        sideBar.style['border'] = '0px'
+        sideBar.style['overflow'] = 'hidden'
+        sideBar.style['height'] = '30px'
+        for(var i in bookListInNavBar){
+            bookListInNavBar[i].style['display'] = 'none'
+        }
+    }
+    let sideBar = document.getElementById('sideBar')
+    let bookListInNavBar = document.getElementsByClassName('bookList')
+    if(sideBar.classList.value == 'showList'){
+        toggleOff(sideBar,bookListInNavBar)
+        sideBar.classList.value = ''
+    }else{
+        toggleOn(sideBar,bookListInNavBar)
+        sideBar.classList.value = 'showList'
+    }
+}
