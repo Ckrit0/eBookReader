@@ -150,7 +150,7 @@ function toggleMobileNavBar(){
         sideBar.style['border'] = '2px solid var(--main-theme-color)'
         sideBar.style['overflow'] = 'auto'
         sideBar.style['height'] = '50vh'
-        for(var i in bookListInNavBar){
+        for(var i=0;i<bookListInNavBar.length;i++){
             bookListInNavBar[i].style['display'] = 'block'
         }
     }
@@ -158,11 +158,11 @@ function toggleMobileNavBar(){
         sideBar.style['border'] = '0px'
         sideBar.style['overflow'] = 'hidden'
         sideBar.style['height'] = '30px'
-        for(var i in bookListInNavBar){
+        for(var i=0;i<bookListInNavBar.length;i++){
             bookListInNavBar[i].style['display'] = 'none'
         }
     }
-    let sideBar = document.getElementById('sideBar')
+    let sideBar = document.getElementById('sidebar')
     let bookListInNavBar = document.getElementsByClassName('bookList')
     if(sideBar.classList.value == 'showList'){
         toggleOff(sideBar,bookListInNavBar)
