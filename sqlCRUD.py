@@ -129,9 +129,10 @@ def insertVolume(bookName,volume,contents):
   keyList = contents.keys()
   insertSql = f""
   for i in keyList:
+    content = contents[i].replace("\\","\\\\").replace("'","\\'")
     insertSql = f'''INSERT INTO CONTENT
       VALUES(
-        (SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{int(i)+1},'{contents[i]}'
+        (SELECT BID FROM INFO WHERE NAME='{bookName}'),{volume},{int(i)+1},'{content}'
       )'''
     sqlList.append(insertSql)
   setDatas(sqlList=sqlList)
