@@ -132,7 +132,12 @@ function setSpaceEvent(){
 function setSection(){
     let lines = document.getElementsByClassName('c_line')
     for(var i in lines){
-        var c = lines[i].innerText.trim()
+        var c = lines[i]
+        try{
+            c = c.innerText.trim()
+        }catch{
+            continue
+        }
         if(c.startsWith('$$')){
             lines[i].innerHTML = lines[i].innerHTML.replace('$$','')
             lines[i].classList.add('c_section') // 제왕절개 아님
