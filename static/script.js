@@ -117,6 +117,7 @@ function moveLine(toLineNumber){
  * 스페이스 누르면 한페이지 스크롤하는 이벤트 설정
  */
 function setSpaceEvent(){
+    let cl = document.getElementById('contentLine')
     document.addEventListener('keydown',(e)=>{
         if(e.key == ' '){
             clSize = cl.getBoundingClientRect()
