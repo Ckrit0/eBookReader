@@ -20,7 +20,8 @@ function useNavBar(){
         if(volumeInput.value == bookInfo['volume']){
             moveLine(lineInput.value)
         }else{
-            window.location.href = "/read/" + bookInfo['name'] + "/" + volumeInput.value + '/' + lineInput.value
+            var tempUrl = window.location.href.split('/')[1]
+            window.location.href = "/" + tempUrl + "/" + bookInfo['name'] + "/" + volumeInput.value + '/' + lineInput.value
         }
     }
     let volumeInput = document.getElementById('headVolume')
