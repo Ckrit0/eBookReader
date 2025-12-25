@@ -133,7 +133,7 @@ function setSection(){
     for(var i in lines){
         var c = lines[i].innerText.trim()
         if(c.startsWith('$$')){
-            lines[i].innerText = lines[i].innerText.replace('$$','')
+            lines[i].innerHTML = lines[i].innerHTML.replace('$$','')
             lines[i].classList.add('c_section') // 제왕절개 아님
         }
     }
