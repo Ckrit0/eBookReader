@@ -79,13 +79,15 @@ async function insertContents(){
     }else{
         targetVolume = document.getElementById("insVolume").innerText
     }
-    if(bookInfo['lastVolume'] <= targetVolume && !confirm(targetVolume + "권(화)의 내용을 업데이트 하시겠습니까?")){
+    if(bookInfo['lastVolume'] <= targetVolume && !confirm(targetVolume + "권(화)의 내용을 수정 하시겠습니까?")){
         return
     }
     let contents = document.getElementById("contentsArea").value
+    // 엔터가 두번 이상이면 한번만 남김
     while(contents.indexOf('\n\n') >= 0){
         contents = contents.replaceAll('\n\n','\n')
     }
+    // 공백이 두번 이상이면 한번만 남김
     while(contents.indexOf('  ') >= 0){
         contents = contents.replaceAll('  ',' ')
     }
@@ -209,7 +211,7 @@ function deleteTarget(type, lineId){
         typeName = "줄을"
         targetURL = "/delete/" + bookInfo['name'] + "/" + bookInfo['volume'] + "/" + lineId
     }
-    if(!confirm('"선택한 ' + typeName + '" 삭제하시겠습니까?')){
+    if(!confirm('선택한 ' + typeName + ' 삭제하시겠습니까?')){
         return
     }
     let targetBtn = document.getElementById('del' + type + lineId)
