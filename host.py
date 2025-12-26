@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import sqlCRUD as db
 import bookQueue
 from datetime import datetime, timedelta
@@ -180,7 +180,7 @@ def insertBookContents(bookName,volume):
     contents = bookQ.getContents(bookId=bookId)
     db.insertVolume(bookName=bookName, volume=volume, contents=contents)
     initData()
-  return result
+  return jsonify(result)
   
 @app.route("/update/<bookName>",methods=["POST"])
 def updateBookName(bookName):
