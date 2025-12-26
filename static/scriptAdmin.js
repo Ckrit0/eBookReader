@@ -122,7 +122,7 @@ async function insertContents(){
             method : 'POST',
             body : data
         })
-        const resResult = res.json()
+        const resResult = res.json().json()
         console.log(resResult)
         if(resResult == 100){
             window.location.href = '/admin/' + bookInfo['name']
