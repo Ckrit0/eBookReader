@@ -178,10 +178,12 @@ def insertBookContents(bookName,volume):
   result, bookId = bookQ.setContents(contentDict=contentDict)
   contents = bookQ.getContents(bookId=bookId)
   if result >= 100:
+    print('완료율:',result,'%')
     db.insertVolume(bookName=bookName, volume=volume, contents=contents)
     initData()
     return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=volume))
   else :
+    print('완료율:',result,'%')
     return str(result) + "%"
 
 @app.route("/update/<bookName>",methods=["POST"])
