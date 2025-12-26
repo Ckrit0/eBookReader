@@ -127,10 +127,10 @@ async function insertContents(){
             let result = res.json()
             console.log('json은')
             console.log(result)
-        }).then((result)=>{
+        }).then((data)=>{
             console.log('result는')
-            console.log(result)
-            if(result == 100){
+            console.log(data)
+            if(data == 100){
                 window.location.href = '/admin/' + bookInfo['name']
             }
         })
