@@ -67,8 +67,7 @@ class volumeForInsert:
                 self.contents["chunkIndex"].append(contentDict[key])
             else :
                 self.contents[key] = contentDict[key]
-        print("컨텐츠 인덱스:",self.contents['chunkIndex'])
-        return self.checkSetContents()
+        return self.checkSetContents(), self.contents['bookId']
     
     def getContents(self):
         self.contents.pop('bookId')
