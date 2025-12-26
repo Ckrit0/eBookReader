@@ -118,22 +118,15 @@ async function insertContents(){
         data.append('bookId', bookId)
         data.append('totalChunk', totalChunk)
         data.append('chunkIndex', chunkIndex)
-        await fetch(targetURL,{
+        const res = await fetch(targetURL,{
             method : 'POST',
             body : data
-        }).then((res)=>{
-            console.log("res는")
-            console.log(res)
-            let result = res.json()
-            console.log('json은')
-            console.log(result)
-        }).then((data)=>{
-            console.log('result는')
-            console.log(data)
-            if(data == 100){
-                window.location.href = '/admin/' + bookInfo['name']
-            }
         })
+        const resResult = res.json()
+        console.log(resResult)
+        if(resResult == 100){
+            window.location.href = '/admin/' + bookInfo['name']
+        }
     }
 }
 
