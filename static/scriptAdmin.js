@@ -125,6 +125,8 @@ async function insertContents(){
             console.log("res는")
             console.log(res)
             let result = res.json()
+            console.log('json은')
+            console.log(result)
         }).then((result)=>{
             console.log('result는')
             console.log(result)
