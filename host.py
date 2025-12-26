@@ -175,9 +175,9 @@ def insertBookContents(bookName,volume):
   contentDict = {}
   for key in request.form.keys():
     contentDict[key] = request.form[key]
-  result, bookId = bookQ.setContents(contentDict=contentDict)
+  (result, bookId) = bookQ.setContents(contentDict=contentDict)
   print("완료율:",result,type(result))
-  if result >= 100:
+  if result[0] >= 100:
     contents = bookQ.getContents(bookId=bookId)
     db.insertVolume(bookName=bookName, volume=volume, contents=contents)
     initData()
