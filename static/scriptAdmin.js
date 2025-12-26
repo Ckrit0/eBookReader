@@ -121,9 +121,14 @@ async function insertContents(){
         await fetch(targetURL,{
             method : 'POST',
             body : data
+        }).then(res=>{
+            var result = res.json()
+            console.log(result)
+            if(result == 100){
+                window.location.href = '/admin/' + bookInfo['name']
+            }
         })
     }
-    window.location.href = '/admin/' + bookInfo['name']
 }
 
 
