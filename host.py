@@ -176,15 +176,12 @@ def insertBookContents(bookName,volume):
   for key in request.form.keys():
     contentDict[key] = request.form[key]
   result, bookId = bookQ.setContents(contentDict=contentDict)
-  print('왜때문에??',result,bookId)
-  if result[0] >= 100:
+  if result >= 100:
     contents = bookQ.getContents(bookId=bookId)
     db.insertVolume(bookName=bookName, volume=volume, contents=contents)
     initData()
-    return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=volume))
-  else :
-    return str(result[0]) + "%"
-
+  return result
+  
 @app.route("/update/<bookName>",methods=["POST"])
 def updateBookName(bookName):
   if not isAdmin(request.remote_addr):
