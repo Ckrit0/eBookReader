@@ -175,15 +175,15 @@ def insertBookContents(bookName,volume):
   contentDict = {}
   for key in request.form.keys():
     contentDict[key] = request.form[key]
-  (result, bookId) = bookQ.setContents(contentDict=contentDict)
-  print("완료율:",result,type(result))
+  result, bookId = bookQ.setContents(contentDict=contentDict)
+  print('왜때문에??',result,bookId)
   if result[0] >= 100:
     contents = bookQ.getContents(bookId=bookId)
     db.insertVolume(bookName=bookName, volume=volume, contents=contents)
     initData()
     return redirect(url_for('viewContentsAdmin',bookName=bookName,volume=volume))
   else :
-    return str(result) + "%"
+    return str(result[0]) + "%"
 
 @app.route("/update/<bookName>",methods=["POST"])
 def updateBookName(bookName):
