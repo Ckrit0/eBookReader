@@ -123,7 +123,7 @@ async function insertContents(){
             body : data
         })
     }
-    //window.location.href = '/admin/' + bookInfo['name']
+    window.location.href = '/admin/' + bookInfo['name']
 }
 
 
